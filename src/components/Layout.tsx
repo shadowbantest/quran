@@ -76,11 +76,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </a>
 
       {/* Top Navigation */}
-      <header className="fixed top-0 left-0 right-0 z-50 glass-heavy border-b border-border/60">
+      <header className="fixed top-0 left-0 right-0 z-50 glass-heavy border-b border-border/40">
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5 group" aria-label="Al-Quran Home">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center shadow-sm" aria-hidden="true">
-              <span className="text-white font-arabic text-base leading-none">قـ</span>
+            <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center shadow-md shadow-primary/15 group-hover:shadow-primary/25 group-hover:scale-105 transition-all duration-300" aria-hidden="true">
+              <span className="text-white font-arabic text-lg leading-none">قـ</span>
             </div>
             <div className="hidden sm:block">
               <span className="text-sm font-bold text-text leading-tight tracking-tight block">Al-Quran</span>
@@ -89,15 +89,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
             {navItems.map(item => (
               <Link
                 key={item.path}
                 to={item.path}
                 aria-current={isActive(item.path) ? 'page' : undefined}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-medium transition-all duration-200 ${
                   isActive(item.path)
-                    ? 'bg-primary text-white shadow-sm'
+                    ? 'bg-gradient-to-r from-primary to-primary-dark text-white shadow-md shadow-primary/15'
                     : 'text-muted hover:text-text hover:bg-hover'
                 }`}
               >
@@ -107,10 +107,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => setTheme(settings.theme === 'dark' ? 'light' : settings.theme === 'light' ? 'sepia' : 'dark')}
-              className="p-2 rounded-lg hover:bg-hover transition-colors text-muted hover:text-text"
+              className="p-2.5 rounded-xl hover:bg-hover transition-all duration-200 text-muted hover:text-text"
               aria-label={themeLabel}
             >
               {themeIcon}
@@ -118,7 +118,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <button
               ref={settingsButtonRef}
               onClick={() => setSettingsOpen(!settingsOpen)}
-              className={`p-2 rounded-lg transition-colors ${settingsOpen ? 'bg-primary/10 text-primary' : 'text-muted hover:text-text hover:bg-hover'}`}
+              className={`p-2.5 rounded-xl transition-all duration-200 ${settingsOpen ? 'bg-primary/10 text-primary' : 'text-muted hover:text-text hover:bg-hover'}`}
               aria-label="Open settings"
               aria-expanded={settingsOpen}
               aria-controls="settings-panel"
@@ -325,8 +325,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 lg:hidden glass-heavy border-t border-border/60" aria-label="Mobile navigation">
-        <div className="flex items-center justify-around h-14 px-2">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 lg:hidden glass-heavy border-t border-border/40" aria-label="Mobile navigation">
+        <div className="flex items-center justify-around h-16 px-1">
           {navItems.map(item => {
             const active = isActive(item.path);
             return (
@@ -335,12 +335,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 to={item.path}
                 aria-current={active ? 'page' : undefined}
                 aria-label={item.label}
-                className={`flex flex-col items-center justify-center gap-0.5 px-3 py-1 rounded-lg transition-all duration-200 min-w-[48px] min-h-[44px] ${
+                className={`relative flex flex-col items-center justify-center gap-1 px-3 py-1.5 rounded-2xl transition-all duration-300 min-w-[52px] min-h-[48px] ${
                   active ? 'text-primary' : 'text-muted'
                 }`}
               >
-                <item.icon size={active ? 20 : 18} strokeWidth={active ? 2.5 : 2} aria-hidden="true" />
-                <span className={`text-[10px] leading-none ${active ? 'font-semibold' : 'font-medium'}`}>
+                {active && (
+                  <span className="absolute -top-0.5 w-6 h-1 bg-gradient-to-r from-primary to-primary-dark rounded-full" aria-hidden="true" />
+                )}
+                <item.icon size={active ? 21 : 19} strokeWidth={active ? 2.5 : 1.8} aria-hidden="true" />
+                <span className={`text-[10px] leading-none ${active ? 'font-bold' : 'font-medium'}`}>
                   {item.label}
                 </span>
               </Link>
@@ -350,9 +353,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </nav>
 
       {/* Footer */}
-      <footer className="hidden lg:block bg-surface/50 border-t border-border/50 py-6 px-4">
+      <footer className="hidden lg:block bg-surface/50 border-t border-border/30 py-8 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-muted/70 text-xs">
+          <div className="diamond-divider mb-4 opacity-30" aria-hidden="true">
+            <span className="w-1 h-1 bg-primary rotate-45 inline-block" />
+          </div>
+          <p className="text-muted/60 text-xs">
             Al-Quran &middot; Arabic text via AlQuran.cloud (Uthmanic script) &middot; Audio via Islamic Network
           </p>
         </div>

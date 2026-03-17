@@ -15,47 +15,59 @@
   /* Light Theme (default) */
   :root,
   .light {
-    --color-bg: 252 253 255;
+    --color-bg: 250 251 254;
     --color-surface: 255 255 255;
+    --color-surface-elevated: 255 255 255;
     --color-text: 15 23 42;
     --color-muted: 71 85 105;
     --color-border: 226 232 240;
     --color-hover: 241 245 249;
     --color-primary: 13 148 136;
     --color-primary-dark: 15 118 110;
+    --color-primary-light: 204 251 241;
     --color-accent: 245 158 11;
     --color-gold: 217 175 96;
     --shadow-color: 0 0 0;
+    --gradient-hero: linear-gradient(135deg, #0d5c63 0%, #0d9488 30%, #065f5b 60%, #0d5c63 100%);
+    --gradient-card: linear-gradient(145deg, rgba(13,148,136,0.04) 0%, rgba(13,148,136,0) 100%);
   }
 
   /* Dark Theme */
   .dark {
-    --color-bg: 15 23 42;
-    --color-surface: 30 41 59;
-    --color-text: 241 245 249;
-    --color-muted: 163 174 191;
-    --color-border: 51 65 85;
-    --color-hover: 51 65 85;
+    --color-bg: 10 15 30;
+    --color-surface: 22 33 55;
+    --color-surface-elevated: 30 41 65;
+    --color-text: 235 240 250;
+    --color-muted: 155 168 188;
+    --color-border: 45 58 82;
+    --color-hover: 38 50 75;
     --color-primary: 20 184 166;
     --color-primary-dark: 13 148 136;
+    --color-primary-light: 30 60 58;
     --color-accent: 251 191 36;
     --color-gold: 217 175 96;
     --shadow-color: 0 0 0;
+    --gradient-hero: linear-gradient(135deg, #041c2c 0%, #0a3d3a 30%, #0d2847 60%, #041c2c 100%);
+    --gradient-card: linear-gradient(145deg, rgba(20,184,166,0.06) 0%, rgba(20,184,166,0) 100%);
   }
 
   /* Sepia Theme */
   .sepia {
     --color-bg: 253 248 237;
     --color-surface: 255 251 240;
+    --color-surface-elevated: 255 253 245;
     --color-text: 55 40 25;
     --color-muted: 100 82 60;
     --color-border: 225 210 180;
     --color-hover: 248 238 218;
     --color-primary: 153 88 28;
     --color-primary-dark: 130 72 18;
+    --color-primary-light: 255 240 210;
     --color-accent: 200 140 40;
     --color-gold: 200 160 80;
     --shadow-color: 80 60 30;
+    --gradient-hero: linear-gradient(135deg, #5c3a1e 0%, #8b5e2f 30%, #6b4423 60%, #5c3a1e 100%);
+    --gradient-card: linear-gradient(145deg, rgba(153,88,28,0.04) 0%, rgba(153,88,28,0) 100%);
   }
 
   * {
@@ -143,10 +155,36 @@
   to { opacity: 1; transform: scale(1); }
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgb(var(--color-primary) / 0.2); }
+  50% { box-shadow: 0 0 20px rgb(var(--color-primary) / 0.4); }
+}
+
 .animate-fade-in { animation: fade-in 0.4s ease-out; }
 .animate-fade-in-up { animation: fade-in-up 0.5s ease-out; }
 .animate-slide-up { animation: slide-up 0.3s ease-out; }
 .animate-scale-in { animation: scale-in 0.3s ease-out; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgb(var(--color-primary) / 0.08) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
 
 /* Staggered animations */
 .stagger-1 { animation-delay: 0.05s; animation-fill-mode: backwards; }
@@ -176,14 +214,23 @@
 /* ========== Islamic Decorative Pattern ========== */
 
 .islamic-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M30 10l20 20-20 20-20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M40 0L80 40L40 80L0 40Z'/%3E%3Cpath d='M40 10L70 40L40 70L10 40Z'/%3E%3Ccircle cx='40' cy='40' r='5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.islamic-pattern-subtle {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='currentColor' fill-opacity='0.03'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Star geometric pattern for hero */
+.islamic-star-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.07' stroke-width='0.5'%3E%3Ccircle cx='50' cy='50' r='40'/%3E%3Ccircle cx='50' cy='50' r='25'/%3E%3Cpath d='M50 10L63 37H87L68 55L75 82L50 66L25 82L32 55L13 37H37Z'/%3E%3Ccircle cx='50' cy='50' r='10'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* Ornamental divider */
 .ornamental-divider {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .ornamental-divider::before,
@@ -191,7 +238,28 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgb(var(--color-primary) / 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--color-primary) / 0.4), transparent);
+}
+
+/* Diamond divider */
+.diamond-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.diamond-divider::before,
+.diamond-divider::after {
+  content: '';
+  flex: 1;
+  max-width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(var(--color-primary) / 0.3));
+}
+
+.diamond-divider::after {
+  background: linear-gradient(90deg, rgb(var(--color-primary) / 0.3), transparent);
 }
 
 /* ========== Glass effects ========== */
@@ -200,6 +268,12 @@
   background: rgb(var(--color-surface) / 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-light {
+  background: rgb(var(--color-surface) / 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 /* ========== Custom scrollbar for WebKit ========== */
@@ -229,9 +303,128 @@
 }
 
 .card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px -5px rgb(var(--shadow-color) / 0.08),
-              0 4px 10px -3px rgb(var(--shadow-color) / 0.04);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px -6px rgb(var(--shadow-color) / 0.1),
+              0 6px 16px -4px rgb(var(--shadow-color) / 0.06);
+}
+
+/* ========== Rich card with gradient border ========== */
+
+.card-rich {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-rich::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgb(var(--color-primary)), rgb(var(--color-gold)), rgb(var(--color-primary)));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card-rich:hover::before {
+  opacity: 1;
+}
+
+.card-rich:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px -6px rgb(var(--shadow-color) / 0.12),
+              0 0 0 1px rgb(var(--color-primary) / 0.15);
+}
+
+/* ========== Verse playing indicator ========== */
+
+.verse-playing {
+  position: relative;
+}
+
+.verse-playing::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, rgb(var(--color-primary)), rgb(var(--color-gold)));
+  border-radius: 0 3px 3px 0;
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* ========== Number badge styles ========== */
+
+.number-badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.number-badge-diamond {
+  width: 40px;
+  height: 40px;
+  transform: rotate(45deg);
+  border-radius: 4px;
+}
+
+.number-badge-diamond > span {
+  transform: rotate(-45deg);
+}
+
+/* ========== Audio waveform bars ========== */
+
+.audio-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 16px;
+}
+
+.audio-bars span {
+  width: 3px;
+  background: currentColor;
+  border-radius: 1px;
+  animation: audio-bar 0.8s ease-in-out infinite;
+}
+
+.audio-bars span:nth-child(1) { height: 40%; animation-delay: 0s; }
+.audio-bars span:nth-child(2) { height: 70%; animation-delay: 0.15s; }
+.audio-bars span:nth-child(3) { height: 100%; animation-delay: 0.3s; }
+.audio-bars span:nth-child(4) { height: 60%; animation-delay: 0.45s; }
+
+@keyframes audio-bar {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+/* ========== Progress bar with glow ========== */
+
+.progress-glow {
+  position: relative;
+}
+
+.progress-glow::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: rgb(var(--color-primary));
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgb(var(--color-primary) / 0.6);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.group:hover .progress-glow::after {
+  opacity: 1;
 }
 
 /* ========== Focus visible ring ========== */
@@ -252,4 +445,33 @@
   text-rendering: optimizeLegibility;
   -webkit-font-feature-settings: "liga" 1, "calt" 1;
   font-feature-settings: "liga" 1, "calt" 1;
+}
+
+/* ========== Surah header ornament ========== */
+
+.surah-header-frame {
+  position: relative;
+  border: 1px solid rgb(var(--color-primary) / 0.2);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+}
+
+.surah-header-frame::before,
+.surah-header-frame::after {
+  content: '﴾';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  color: rgb(var(--color-primary) / 0.3);
+  font-family: 'Amiri Quran', 'Amiri', serif;
+}
+
+.surah-header-frame::before {
+  content: '﴿';
+  left: 12px;
+}
+
+.surah-header-frame::after {
+  right: 12px;
 }

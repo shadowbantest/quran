@@ -58,10 +58,10 @@ export function AudioPlayer({
       role="region"
       aria-label="Audio player"
     >
-      <div className="glass-heavy border-t border-border/60 shadow-2xl">
+      <div className="glass-heavy border-t border-border/40 shadow-2xl">
         {/* Progress Bar */}
         <div
-          className="h-1 bg-border/40 cursor-pointer group"
+          className="h-1.5 bg-border/30 cursor-pointer group relative"
           role="slider"
           aria-label="Playback progress"
           aria-valuenow={Math.round(currentTime)}
@@ -81,47 +81,47 @@ export function AudioPlayer({
           }}
         >
           <div
-            className="h-full bg-primary transition-all duration-150 group-hover:h-1.5"
+            className="h-full bg-gradient-to-r from-primary to-primary-dark transition-all duration-150 group-hover:h-2 progress-glow relative"
             style={{ width: `${progress}%` }}
           />
         </div>
 
-        <div className="max-w-7xl mx-auto px-3 py-2.5 flex items-center gap-3">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
           {/* Info */}
           <div className="flex-1 min-w-0" aria-live="polite">
-            <p className="text-xs font-semibold text-text truncate">{surahName}</p>
-            <p className="text-[10px] text-muted">
+            <p className="text-sm font-bold text-text truncate">{surahName}</p>
+            <p className="text-[11px] text-muted">
               Verse {currentAyah} of {totalAyahs}
             </p>
           </div>
 
           {/* Controls */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={onPrevious}
               disabled={currentAyah <= 1}
-              className="p-2 min-w-[44px] min-h-[44px] rounded-lg hover:bg-hover text-muted hover:text-text disabled:opacity-30 transition-colors"
+              className="p-2.5 min-w-[44px] min-h-[44px] rounded-xl hover:bg-hover text-muted hover:text-text disabled:opacity-30 transition-all duration-200"
               aria-label="Previous verse"
             >
               <SkipBack size={16} aria-hidden="true" />
             </button>
             <button
               onClick={isPlaying ? onPause : onPlay}
-              className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 shadow-sm bg-primary text-white"
+              className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg shadow-primary/25 bg-gradient-to-br from-primary to-primary-dark text-white hover:shadow-primary/40 hover:scale-105 active:scale-95"
               aria-label={isPlaying ? 'Pause' : 'Play'}
             >
               {isLoading ? (
-                <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                <Loader2 size={18} className="animate-spin" aria-hidden="true" />
               ) : isPlaying ? (
-                <Pause size={16} aria-hidden="true" />
+                <Pause size={18} aria-hidden="true" />
               ) : (
-                <Play size={16} className="ml-0.5" aria-hidden="true" />
+                <Play size={18} className="ml-0.5" aria-hidden="true" />
               )}
             </button>
             <button
               onClick={onNext}
               disabled={currentAyah >= totalAyahs}
-              className="p-2 min-w-[44px] min-h-[44px] rounded-lg hover:bg-hover text-muted hover:text-text disabled:opacity-30 transition-colors"
+              className="p-2.5 min-w-[44px] min-h-[44px] rounded-xl hover:bg-hover text-muted hover:text-text disabled:opacity-30 transition-all duration-200"
               aria-label="Next verse"
             >
               <SkipForward size={16} aria-hidden="true" />
@@ -129,23 +129,23 @@ export function AudioPlayer({
           </div>
 
           {/* Time, Volume, Close */}
-          <div className="flex items-center gap-2 flex-1 justify-end">
-            <span className="hidden sm:inline text-[10px] text-muted tabular-nums" aria-hidden="true">
+          <div className="flex items-center gap-2.5 flex-1 justify-end">
+            <span className="hidden sm:inline text-[11px] text-muted tabular-nums font-medium" aria-hidden="true">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
             <button
               onClick={handleMuteToggle}
-              className="hidden sm:inline-flex p-1.5 rounded-lg hover:bg-hover text-muted hover:text-text transition-colors"
+              className="hidden sm:inline-flex p-2 rounded-xl hover:bg-hover text-muted hover:text-text transition-all duration-200"
               aria-label={muted ? 'Unmute' : 'Mute'}
             >
-              {muted ? <VolumeX size={14} aria-hidden="true" /> : <Volume2 size={14} aria-hidden="true" />}
+              {muted ? <VolumeX size={16} aria-hidden="true" /> : <Volume2 size={16} aria-hidden="true" />}
             </button>
             <button
               onClick={onClose}
-              className="p-2 min-w-[44px] min-h-[44px] sm:p-1.5 sm:min-w-0 sm:min-h-0 rounded-lg hover:bg-hover text-muted hover:text-text transition-colors"
+              className="p-2 min-w-[44px] min-h-[44px] sm:p-2 sm:min-w-0 sm:min-h-0 rounded-xl hover:bg-hover text-muted hover:text-text transition-all duration-200"
               aria-label="Close audio player"
             >
-              <X size={14} aria-hidden="true" />
+              <X size={16} aria-hidden="true" />
             </button>
           </div>
         </div>

@@ -187,28 +187,29 @@ export function SurahPage() {
   return (
     <div className={`${audioPlayer.currentAyah > 0 ? 'pb-24' : ''}`}>
       {/* Surah Header */}
-      <header className="relative overflow-hidden bg-gradient-to-br from-teal-700 via-teal-800 to-emerald-900 text-white">
-        <div className="absolute inset-0 islamic-pattern" aria-hidden="true" />
+      <header className="relative overflow-hidden text-white" style={{ background: 'var(--gradient-hero)' }}>
+        <div className="absolute inset-0 islamic-star-pattern" aria-hidden="true" />
         <div className="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl" aria-hidden="true" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border border-white/[0.04]" aria-hidden="true" />
 
-        <div className="relative max-w-4xl mx-auto px-4 py-8">
+        <div className="relative max-w-4xl mx-auto px-4 py-10 md:py-12">
           {/* Surah Navigation */}
-          <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center justify-between mb-6">
             <button
               onClick={() => surahNumber > 1 && navigate(`/surah/${surahNumber - 1}`)}
               disabled={surahNumber <= 1}
-              className="flex items-center gap-1 text-xs text-white/60 hover:text-white disabled:opacity-30 transition-colors"
+              className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white disabled:opacity-30 transition-all duration-200 hover:bg-white/10 px-3 py-1.5 rounded-lg"
               aria-label={surahNumber > 1 ? `Previous: ${SURAHS[surahNumber - 2].englishName}` : 'No previous surah'}
             >
               <ChevronLeft size={14} aria-hidden="true" /> Prev
             </button>
-            <Link to="/surahs" className="text-xs text-white/60 hover:text-white transition-colors">
+            <Link to="/surahs" className="text-xs text-white/50 hover:text-white transition-all duration-200 hover:bg-white/10 px-3 py-1.5 rounded-lg">
               All Surahs
             </Link>
             <button
               onClick={() => surahNumber < 114 && navigate(`/surah/${surahNumber + 1}`)}
               disabled={surahNumber >= 114}
-              className="flex items-center gap-1 text-xs text-white/60 hover:text-white disabled:opacity-30 transition-colors"
+              className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white disabled:opacity-30 transition-all duration-200 hover:bg-white/10 px-3 py-1.5 rounded-lg"
               aria-label={surahNumber < 114 ? `Next: ${SURAHS[surahNumber].englishName}` : 'No next surah'}
             >
               Next <ChevronRight size={14} aria-hidden="true" />
@@ -217,22 +218,21 @@ export function SurahPage() {
 
           {/* Surah Info */}
           <div className="text-center animate-fade-in">
-            <p className="font-arabic text-4xl md:text-5xl mb-2 leading-relaxed" dir="rtl" lang="ar">{surahInfo.name}</p>
-            <h1 className="text-xl md:text-2xl font-bold mb-0.5">{surahInfo.englishName}</h1>
-            <p className="text-white/60 text-sm mb-3">{surahInfo.englishNameTranslation}</p>
-            <div className="flex flex-wrap justify-center gap-3 text-xs text-white/50">
-              <span>{surahInfo.revelationType}</span>
-              <span className="text-white/20" aria-hidden="true">|</span>
-              <span>{surahInfo.numberOfAyahs} verses</span>
-              <span className="text-white/20" aria-hidden="true">|</span>
-              <span>{surahInfo.rukus} rukus</span>
-              <span className="text-white/20" aria-hidden="true">|</span>
-              <span>Juz {surahInfo.startJuz}</span>
+            <div className="surah-header-frame inline-block mb-4 px-10 md:px-16" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
+              <p className="font-arabic text-4xl md:text-5xl leading-relaxed text-white/90" dir="rtl" lang="ar">{surahInfo.name}</p>
+            </div>
+            <h1 className="text-2xl md:text-3xl font-extrabold mb-1 tracking-tight">{surahInfo.englishName}</h1>
+            <p className="text-white/50 text-sm mb-4">{surahInfo.englishNameTranslation}</p>
+            <div className="flex flex-wrap justify-center gap-3 text-xs">
+              <span className="bg-white/10 px-3 py-1 rounded-full text-white/70">{surahInfo.revelationType}</span>
+              <span className="bg-white/10 px-3 py-1 rounded-full text-white/70">{surahInfo.numberOfAyahs} verses</span>
+              <span className="bg-white/10 px-3 py-1 rounded-full text-white/70">{surahInfo.rukus} rukus</span>
+              <span className="bg-white/10 px-3 py-1 rounded-full text-white/70">Juz {surahInfo.startJuz}</span>
             </div>
           </div>
 
           {/* Play Button */}
-          <div className="flex justify-center mt-5">
+          <div className="flex justify-center mt-6">
             <button
               onClick={() => {
                 if (audioPlayer.isPlaying) {
@@ -241,11 +241,11 @@ export function SurahPage() {
                   playVerse(audioPlayer.currentAyah || 1);
                 }
               }}
-              className="flex items-center gap-2 px-5 py-2.5 bg-white/15 backdrop-blur-sm rounded-xl hover:bg-white/25 transition-all duration-200 text-sm font-medium border border-white/10"
+              className="group flex items-center gap-2.5 px-7 py-3 bg-white/10 backdrop-blur-md rounded-2xl hover:bg-white/20 transition-all duration-300 text-sm font-semibold border border-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-white/5"
               aria-label={audioPlayer.isPlaying ? 'Pause recitation' : 'Play recitation'}
             >
               {audioPlayer.isPlaying ? <Pause size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
-              {audioPlayer.isPlaying ? 'Pause' : 'Play Recitation'}
+              {audioPlayer.isPlaying ? 'Pause Recitation' : 'Play Recitation'}
             </button>
           </div>
         </div>
@@ -398,17 +398,19 @@ export function SurahPage() {
 
       {/* Surah Navigation Footer */}
       {!loading && (
-        <nav className="max-w-4xl mx-auto px-4 py-6 flex justify-between gap-3" aria-label="Surah navigation">
+        <nav className="max-w-4xl mx-auto px-4 py-8 flex justify-between gap-4" aria-label="Surah navigation">
           <button
             onClick={() => surahNumber > 1 && navigate(`/surah/${surahNumber - 1}`)}
             disabled={surahNumber <= 1}
-            className="flex items-center gap-2 px-4 py-2.5 bg-surface border border-border/60 rounded-xl hover:border-primary/30 disabled:opacity-30 transition-all duration-200 shadow-card card-hover"
+            className="group flex-1 flex items-center gap-3 px-5 py-4 bg-surface border border-border/50 rounded-2xl hover:border-primary/30 disabled:opacity-30 transition-all duration-300 shadow-card card-rich"
             aria-label={surahNumber > 1 ? `Previous: ${SURAHS[surahNumber - 2].englishName}` : undefined}
           >
-            <ChevronLeft size={14} aria-hidden="true" />
+            <div className="w-8 h-8 rounded-lg bg-primary/8 flex items-center justify-center group-hover:bg-primary/15 transition-colors" aria-hidden="true">
+              <ChevronLeft size={16} className="text-primary" />
+            </div>
             <div className="text-left">
-              <p className="text-[10px] text-muted uppercase tracking-wider">Previous</p>
-              <p className="text-xs font-medium text-text">
+              <p className="text-[10px] text-primary font-bold uppercase tracking-[0.12em]">Previous</p>
+              <p className="text-sm font-semibold text-text">
                 {surahNumber > 1 ? SURAHS[surahNumber - 2].englishName : ''}
               </p>
             </div>
@@ -416,16 +418,18 @@ export function SurahPage() {
           <button
             onClick={() => surahNumber < 114 && navigate(`/surah/${surahNumber + 1}`)}
             disabled={surahNumber >= 114}
-            className="flex items-center gap-2 px-4 py-2.5 bg-surface border border-border/60 rounded-xl hover:border-primary/30 disabled:opacity-30 transition-all duration-200 shadow-card card-hover"
+            className="group flex-1 flex items-center justify-end gap-3 px-5 py-4 bg-surface border border-border/50 rounded-2xl hover:border-primary/30 disabled:opacity-30 transition-all duration-300 shadow-card card-rich"
             aria-label={surahNumber < 114 ? `Next: ${SURAHS[surahNumber].englishName}` : undefined}
           >
             <div className="text-right">
-              <p className="text-[10px] text-muted uppercase tracking-wider">Next</p>
-              <p className="text-xs font-medium text-text">
+              <p className="text-[10px] text-primary font-bold uppercase tracking-[0.12em]">Next</p>
+              <p className="text-sm font-semibold text-text">
                 {surahNumber < 114 ? SURAHS[surahNumber].englishName : ''}
               </p>
             </div>
-            <ChevronRight size={14} aria-hidden="true" />
+            <div className="w-8 h-8 rounded-lg bg-primary/8 flex items-center justify-center group-hover:bg-primary/15 transition-colors" aria-hidden="true">
+              <ChevronRight size={16} className="text-primary" />
+            </div>
           </button>
         </nav>
       )}
