@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { JUZS, SURAHS, toArabicNumeral } from '../data/quran-metadata';
+import { JUZS, SURAHS } from '../data/quran-metadata';
 
 export function JuzPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-text mb-2">Browse by Juz</h1>
-        <p className="text-muted">The Quran is divided into 30 equal parts called Juz (plural: Ajza)</p>
+    <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-text mb-1">Browse by Juz</h1>
+        <p className="text-sm text-muted">The Quran is divided into 30 equal parts called Juz</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {JUZS.map(juz => {
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {JUZS.map((juz, i) => {
           const startSurah = SURAHS[juz.startSurah - 1];
           const endSurah = SURAHS[juz.endSurah - 1];
 
@@ -20,17 +20,17 @@ export function JuzPage() {
             <Link
               key={juz.number}
               to={`/surah/${juz.startSurah}#verse-${juz.startAyah}`}
-              className="group bg-surface border border-border rounded-2xl p-5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all"
+              className={`animate-fade-in stagger-${Math.min(i % 6 + 1, 8)} group bg-surface border border-border/60 rounded-xl p-4 card-hover shadow-card`}
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center shadow-sm">
-                  <span className="text-white text-sm font-bold">{juz.number}</span>
+              <div className="flex items-start justify-between mb-2.5">
+                <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center shadow-sm">
+                  <span className="text-white text-xs font-bold">{juz.number}</span>
                 </div>
-                <ArrowRight size={16} className="text-muted group-hover:text-primary transition-colors mt-2" />
+                <ArrowRight size={14} className="text-muted group-hover:text-primary transition-colors mt-2" />
               </div>
-              <h3 className="font-semibold text-text mb-1">Juz {juz.number}</h3>
-              <p className="text-sm text-muted mb-3">{juz.name}</p>
-              <div className="text-xs text-muted/70 space-y-0.5">
+              <h3 className="font-semibold text-text text-sm mb-0.5">Juz {juz.number}</h3>
+              <p className="text-xs text-muted mb-2.5">{juz.name}</p>
+              <div className="text-[10px] text-muted/60 space-y-0.5">
                 <p>
                   Starts: {startSurah.englishName} {juz.startSurah}:{juz.startAyah}
                 </p>

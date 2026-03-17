@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Play, Pause, Loader2, BookOpen, BookText, AlignJustify } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Pause, Loader2, BookText, AlignJustify } from 'lucide-react';
 import { getSurahWithTranslation, getSurahAudio, AyahData } from '../api/quran';
 import { VerseDisplay } from '../components/VerseDisplay';
 import { MushafView } from '../components/MushafView';
@@ -28,11 +28,9 @@ export function SurahPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [audioData, setAudioData] = useState<AyahData[]>([]);
-  const [showControls, setShowControls] = useState(false);
 
   const versesRef = useRef<HTMLDivElement>(null);
 
-  // Fetch surah data
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
@@ -56,7 +54,6 @@ export function SurahPage() {
     return () => { cancelled = true; };
   }, [surahNumber, settings.selectedTranslation]);
 
-  // Scroll to verse from hash
   useEffect(() => {
     if (!loading && location.hash) {
       const el = document.getElementById(location.hash.slice(1));
@@ -66,14 +63,12 @@ export function SurahPage() {
     }
   }, [loading, location.hash]);
 
-  // Save last read position
   useEffect(() => {
     if (surahInfo) {
       saveLastRead(surahNumber, 1, surahInfo.englishName);
     }
   }, [surahNumber, surahInfo, saveLastRead]);
 
-  // Load audio data
   const loadAudio = useCallback(async () => {
     try {
       const data = await getSurahAudio(surahNumber, settings.selectedReciter);
@@ -83,7 +78,6 @@ export function SurahPage() {
     }
   }, [surahNumber, settings.selectedReciter]);
 
-  // Play verse audio
   const playVerse = useCallback(async (ayahNumberInSurah: number) => {
     if (audioData.length === 0) {
       await loadAudio();
@@ -94,7 +88,6 @@ export function SurahPage() {
       const audioUrl = `https://cdn.islamic.network/quran/audio/128/${settings.selectedReciter}/${ayah.number}.mp3`;
       await audioPlayer.play(audioUrl, ayahNumberInSurah);
     } else {
-      // Fallback: construct URL
       const globalNumber = arabicVerses.find(v => v.numberInSurah === ayahNumberInSurah)?.number;
       if (globalNumber) {
         const audioUrl = `https://cdn.islamic.network/quran/audio/128/${settings.selectedReciter}/${globalNumber}.mp3`;
@@ -103,7 +96,6 @@ export function SurahPage() {
     }
   }, [audioData, loadAudio, settings.selectedReciter, audioPlayer, arabicVerses]);
 
-  // Auto-advance to next verse
   useEffect(() => {
     const cleanup = audioPlayer.onEnded(() => {
       const nextAyah = audioPlayer.currentAyah + 1;
@@ -116,7 +108,6 @@ export function SurahPage() {
     return cleanup;
   }, [audioPlayer, playVerse, surahInfo]);
 
-  // Preload audio when component mounts
   useEffect(() => {
     loadAudio();
   }, [loadAudio]);
@@ -133,47 +124,50 @@ export function SurahPage() {
   return (
     <div className={`${audioPlayer.currentAyah > 0 ? 'pb-24' : ''}`}>
       {/* Surah Header */}
-      <div className="bg-gradient-to-br from-primary via-primary-dark to-emerald-900 text-white">
-        <div className="max-w-4xl mx-auto px-4 py-10">
+      <div className="relative overflow-hidden bg-gradient-to-br from-teal-700 via-teal-800 to-emerald-900 text-white">
+        <div className="absolute inset-0 islamic-pattern" />
+        <div className="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl" />
+
+        <div className="relative max-w-4xl mx-auto px-4 py-8">
           {/* Navigation */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-5">
             <button
               onClick={() => surahNumber > 1 && navigate(`/surah/${surahNumber - 1}`)}
               disabled={surahNumber <= 1}
-              className="flex items-center gap-1 text-sm text-white/70 hover:text-white disabled:opacity-30 transition-colors"
+              className="flex items-center gap-1 text-xs text-white/60 hover:text-white disabled:opacity-30 transition-colors"
             >
-              <ChevronLeft size={16} /> Previous
+              <ChevronLeft size={14} /> Prev
             </button>
-            <Link to="/surahs" className="text-sm text-white/70 hover:text-white transition-colors">
+            <Link to="/surahs" className="text-xs text-white/60 hover:text-white transition-colors">
               All Surahs
             </Link>
             <button
               onClick={() => surahNumber < 114 && navigate(`/surah/${surahNumber + 1}`)}
               disabled={surahNumber >= 114}
-              className="flex items-center gap-1 text-sm text-white/70 hover:text-white disabled:opacity-30 transition-colors"
+              className="flex items-center gap-1 text-xs text-white/60 hover:text-white disabled:opacity-30 transition-colors"
             >
-              Next <ChevronRight size={16} />
+              Next <ChevronRight size={14} />
             </button>
           </div>
 
           {/* Surah Info */}
-          <div className="text-center">
-            <p className="font-arabic text-4xl md:text-5xl mb-3">{surahInfo.name}</p>
-            <h1 className="text-2xl md:text-3xl font-bold mb-1">{surahInfo.englishName}</h1>
-            <p className="text-white/70 mb-4">{surahInfo.englishNameTranslation}</p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-white/60">
+          <div className="text-center animate-fade-in">
+            <p className="font-arabic text-4xl md:text-5xl mb-2 leading-relaxed">{surahInfo.name}</p>
+            <h1 className="text-xl md:text-2xl font-bold mb-0.5">{surahInfo.englishName}</h1>
+            <p className="text-white/60 text-sm mb-3">{surahInfo.englishNameTranslation}</p>
+            <div className="flex flex-wrap justify-center gap-3 text-xs text-white/50">
               <span>{surahInfo.revelationType}</span>
-              <span>|</span>
+              <span className="text-white/20">|</span>
               <span>{surahInfo.numberOfAyahs} verses</span>
-              <span>|</span>
+              <span className="text-white/20">|</span>
               <span>{surahInfo.rukus} rukus</span>
-              <span>|</span>
+              <span className="text-white/20">|</span>
               <span>Juz {surahInfo.startJuz}</span>
             </div>
           </div>
 
-          {/* Play All Button */}
-          <div className="flex justify-center mt-6">
+          {/* Play Button */}
+          <div className="flex justify-center mt-5">
             <button
               onClick={() => {
                 if (audioPlayer.isPlaying) {
@@ -182,44 +176,42 @@ export function SurahPage() {
                   playVerse(audioPlayer.currentAyah || 1);
                 }
               }}
-              className="flex items-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors"
+              className="flex items-center gap-2 px-5 py-2.5 bg-white/15 backdrop-blur-sm rounded-xl hover:bg-white/25 transition-all duration-200 text-sm font-medium border border-white/10"
             >
-              {audioPlayer.isPlaying ? <Pause size={18} /> : <Play size={18} />}
-              {audioPlayer.isPlaying ? 'Pause Recitation' : 'Play Recitation'}
+              {audioPlayer.isPlaying ? <Pause size={16} /> : <Play size={16} />}
+              {audioPlayer.isPlaying ? 'Pause' : 'Play Recitation'}
             </button>
           </div>
         </div>
       </div>
 
       {/* Controls Bar */}
-      <div className="sticky top-16 z-30 bg-surface/95 backdrop-blur-md border-b border-border">
-        <div className="max-w-4xl mx-auto px-4 py-2 flex items-center gap-2 overflow-x-auto">
-          {/* Mushaf / Verse-by-Verse Toggle */}
-          <div className="shrink-0 flex bg-hover rounded-lg overflow-hidden">
+      <div className="sticky top-14 z-30 glass-heavy border-b border-border/60">
+        <div className="max-w-4xl mx-auto px-4 py-2 flex items-center gap-1.5 overflow-x-auto">
+          {/* Mushaf / Verse Toggle */}
+          <div className="shrink-0 flex bg-hover/60 rounded-lg overflow-hidden border border-border/40">
             <button
               onClick={() => setMushafMode(false)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm transition-colors ${
+              className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium transition-all duration-200 ${
                 !settings.mushafMode ? 'bg-primary text-white' : 'text-muted hover:text-text'
               }`}
-              title="Verse by verse"
             >
-              <AlignJustify size={14} /> Verses
+              <AlignJustify size={12} /> Verses
             </button>
             <button
               onClick={() => setMushafMode(true)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm transition-colors ${
+              className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium transition-all duration-200 ${
                 settings.mushafMode ? 'bg-primary text-white' : 'text-muted hover:text-text'
               }`}
-              title="Mushaf mode"
             >
-              <BookText size={14} /> Mushaf
+              <BookText size={12} /> Mushaf
             </button>
           </div>
 
           <select
             value={settings.arabicFont}
             onChange={(e) => setArabicFont(e.target.value as any)}
-            className="shrink-0 px-3 py-1.5 text-sm bg-hover border-none rounded-lg text-text focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+            className="shrink-0 px-2.5 py-1.5 text-xs bg-hover/60 border border-border/40 rounded-lg text-text focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
           >
             {ARABIC_FONTS.map(f => (
               <option key={f.id} value={f.id}>{f.label}</option>
@@ -229,7 +221,7 @@ export function SurahPage() {
           <select
             value={settings.selectedTranslation}
             onChange={(e) => setTranslation(e.target.value)}
-            className="shrink-0 px-3 py-1.5 text-sm bg-hover border-none rounded-lg text-text focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+            className="shrink-0 px-2.5 py-1.5 text-xs bg-hover/60 border border-border/40 rounded-lg text-text focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
           >
             {TRANSLATIONS.map(t => (
               <option key={t.identifier} value={t.identifier}>
@@ -241,7 +233,7 @@ export function SurahPage() {
           <select
             value={settings.selectedReciter}
             onChange={(e) => setReciter(e.target.value)}
-            className="shrink-0 px-3 py-1.5 text-sm bg-hover border-none rounded-lg text-text focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+            className="shrink-0 px-2.5 py-1.5 text-xs bg-hover/60 border border-border/40 rounded-lg text-text focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
           >
             {POPULAR_RECITERS.map(r => (
               <option key={r.identifier} value={r.identifier}>
@@ -254,10 +246,12 @@ export function SurahPage() {
 
       {/* Bismillah */}
       {surahNumber !== 1 && surahNumber !== 9 && (
-        <div className="text-center py-8 border-b border-border/50">
-          <p className="font-arabic text-3xl md:text-4xl text-primary leading-relaxed">
-            {BISMILLAH}
-          </p>
+        <div className="text-center py-6">
+          <div className="ornamental-divider max-w-md mx-auto px-4">
+            <p className="font-arabic text-2xl md:text-3xl text-primary/80 leading-relaxed shrink-0">
+              {BISMILLAH}
+            </p>
+          </div>
         </div>
       )}
 
@@ -265,16 +259,16 @@ export function SurahPage() {
       <div ref={versesRef}>
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24">
-            <Loader2 size={32} className="animate-spin text-primary mb-4" />
-            <p className="text-muted">Loading surah...</p>
+            <Loader2 size={28} className="animate-spin text-primary mb-3" />
+            <p className="text-muted text-sm">Loading surah...</p>
           </div>
         ) : error ? (
           <div className="text-center py-24">
-            <p className="text-red-500 text-lg mb-2">Failed to load surah</p>
-            <p className="text-muted text-sm mb-4">{error}</p>
+            <p className="text-red-500 text-base mb-2">Failed to load surah</p>
+            <p className="text-muted text-xs mb-4">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors text-sm"
             >
               Retry
             </button>
@@ -333,16 +327,16 @@ export function SurahPage() {
 
       {/* Surah Navigation */}
       {!loading && (
-        <div className="max-w-4xl mx-auto px-4 py-8 flex justify-between">
+        <div className="max-w-4xl mx-auto px-4 py-6 flex justify-between gap-3">
           <button
             onClick={() => surahNumber > 1 && navigate(`/surah/${surahNumber - 1}`)}
             disabled={surahNumber <= 1}
-            className="flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl hover:border-primary/30 disabled:opacity-30 transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 bg-surface border border-border/60 rounded-xl hover:border-primary/30 disabled:opacity-30 transition-all duration-200 shadow-card card-hover"
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={14} />
             <div className="text-left">
-              <p className="text-xs text-muted">Previous</p>
-              <p className="text-sm font-medium text-text">
+              <p className="text-[10px] text-muted uppercase tracking-wider">Previous</p>
+              <p className="text-xs font-medium text-text">
                 {surahNumber > 1 ? SURAHS[surahNumber - 2].englishName : ''}
               </p>
             </div>
@@ -350,15 +344,15 @@ export function SurahPage() {
           <button
             onClick={() => surahNumber < 114 && navigate(`/surah/${surahNumber + 1}`)}
             disabled={surahNumber >= 114}
-            className="flex items-center gap-2 px-6 py-3 bg-surface border border-border rounded-xl hover:border-primary/30 disabled:opacity-30 transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 bg-surface border border-border/60 rounded-xl hover:border-primary/30 disabled:opacity-30 transition-all duration-200 shadow-card card-hover"
           >
             <div className="text-right">
-              <p className="text-xs text-muted">Next</p>
-              <p className="text-sm font-medium text-text">
+              <p className="text-[10px] text-muted uppercase tracking-wider">Next</p>
+              <p className="text-xs font-medium text-text">
                 {surahNumber < 114 ? SURAHS[surahNumber].englishName : ''}
               </p>
             </div>
-            <ChevronRight size={16} />
+            <ChevronRight size={14} />
           </button>
         </div>
       )}

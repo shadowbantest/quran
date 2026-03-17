@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Book, Headphones, Search as SearchIcon, Bookmark, ArrowRight, Layers } from 'lucide-react';
+import { Book, Headphones, Search as SearchIcon, ArrowRight, Layers, Star, Sparkles } from 'lucide-react';
 import { SearchBar } from '../components/SearchBar';
 import { SurahCard } from '../components/SurahCard';
 import { SURAHS, BISMILLAH } from '../data/quran-metadata';
@@ -14,139 +14,164 @@ export function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary-dark to-emerald-900 text-white">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 right-10 font-arabic text-[200px] leading-none opacity-20 select-none">
-            ٱلْقُرْآن
-          </div>
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
+      <section className="relative overflow-hidden bg-gradient-to-br from-teal-700 via-teal-800 to-emerald-900 text-white">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 islamic-pattern" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-teal-400/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+
+        <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24 lg:py-28">
           <div className="text-center max-w-3xl mx-auto">
-            <p className="font-arabic text-2xl md:text-3xl mb-4 opacity-90">{BISMILLAH}</p>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">
+            {/* Ornamental Bismillah */}
+            <div className="animate-fade-in mb-6">
+              <div className="inline-block">
+                <p className="font-arabic text-xl md:text-2xl text-white/70">{BISMILLAH}</p>
+              </div>
+            </div>
+
+            <h1 className="animate-fade-in-up text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight leading-tight">
               The Noble Quran
             </h1>
-            <p className="text-lg md:text-xl opacity-80 mb-8 max-w-xl mx-auto">
-              Read, listen, and study the Holy Quran with translations in 20+ languages,
-              beautiful recitations, and powerful search.
+            <p className="animate-fade-in-up stagger-2 text-base md:text-lg text-white/70 mb-8 max-w-lg mx-auto leading-relaxed">
+              Read, listen, and study the Holy Quran with translations, beautiful recitations, and powerful search.
             </p>
-            <div className="mb-8">
+
+            <div className="animate-fade-in-up stagger-3 mb-8">
               <SearchBar large />
             </div>
-            <div className="flex flex-wrap justify-center gap-3">
+
+            <div className="animate-fade-in-up stagger-4 flex flex-wrap justify-center gap-2.5">
               <Link
                 to="/surahs"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 backdrop-blur-sm rounded-xl hover:bg-white/25 transition-all duration-200 text-sm font-medium border border-white/10"
               >
-                <Book size={18} /> Browse Surahs
+                <Book size={16} /> Browse Surahs
               </Link>
               <Link
                 to="/juz"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 backdrop-blur-sm rounded-xl hover:bg-white/25 transition-all duration-200 text-sm font-medium border border-white/10"
               >
-                <Layers size={18} /> Browse by Juz
+                <Layers size={16} /> Browse by Juz
               </Link>
               <Link
                 to="/search"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 backdrop-blur-sm rounded-xl hover:bg-white/25 transition-all duration-200 text-sm font-medium border border-white/10"
               >
-                <SearchIcon size={18} /> Search Quran
+                <SearchIcon size={16} /> Search
               </Link>
             </div>
           </div>
         </div>
-        {/* Wave */}
+
+        {/* Bottom curve */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" className="w-full h-auto" style={{ fill: 'rgb(var(--color-bg))' }}>
-            <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" />
+          <svg viewBox="0 0 1440 48" className="w-full h-auto block" preserveAspectRatio="none" style={{ fill: 'rgb(var(--color-bg))' }}>
+            <path d="M0,24 C360,48 720,0 1080,24 C1260,36 1380,48 1440,48 L1440,48 L0,48 Z" />
           </svg>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 py-10">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Continue Reading */}
         {lastRead && (
-          <section className="mb-12">
+          <section className="animate-fade-in mb-10">
             <Link
               to={`/surah/${lastRead.surahNumber}#verse-${lastRead.ayahNumber}`}
-              className="block bg-gradient-to-r from-primary/10 to-transparent border border-primary/20 rounded-2xl p-6 hover:border-primary/40 transition-all"
+              className="group block bg-gradient-to-r from-primary/8 via-primary/4 to-transparent border border-primary/15 rounded-2xl p-5 hover:border-primary/30 hover:shadow-glow transition-all duration-300"
             >
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted font-medium mb-1">Continue Reading</p>
-                  <p className="text-lg font-bold text-text">{lastRead.surahName}</p>
-                  <p className="text-sm text-muted">Verse {lastRead.ayahNumber}</p>
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                    <Sparkles size={18} className="text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted font-medium uppercase tracking-wider mb-0.5">Continue Reading</p>
+                    <p className="text-base font-bold text-text">{lastRead.surahName}</p>
+                    <p className="text-xs text-muted">Verse {lastRead.ayahNumber}</p>
+                  </div>
                 </div>
-                <ArrowRight size={20} className="text-primary" />
+                <ArrowRight size={18} className="text-primary group-hover:translate-x-1 transition-transform duration-200" />
               </div>
             </Link>
           </section>
         )}
 
         {/* Quick Stats */}
-        <section className="mb-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <section className="mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { label: 'Surahs', value: '114', icon: Book },
-              { label: 'Verses', value: '6,236', icon: Layers },
+              { label: 'Verses', value: '6,236', icon: Star },
               { label: 'Reciters', value: '8+', icon: Headphones },
-              { label: 'Translations', value: '20+', icon: SearchIcon },
-            ].map(stat => (
-              <div key={stat.label} className="bg-surface rounded-2xl border border-border p-4 text-center">
-                <stat.icon size={20} className="mx-auto text-primary mb-2" />
-                <p className="text-2xl font-bold text-text">{stat.value}</p>
-                <p className="text-sm text-muted">{stat.label}</p>
+              { label: 'Languages', value: '20+', icon: Layers },
+            ].map((stat, i) => (
+              <div
+                key={stat.label}
+                className={`animate-fade-in-up stagger-${i + 1} bg-surface rounded-xl border border-border/60 p-4 text-center card-hover shadow-card`}
+              >
+                <div className="w-8 h-8 bg-primary/8 rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <stat.icon size={16} className="text-primary" />
+                </div>
+                <p className="text-xl font-bold text-text">{stat.value}</p>
+                <p className="text-xs text-muted mt-0.5">{stat.label}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Featured Surahs */}
-        <section className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-text">Popular Surahs</h2>
+        <section className="mb-10">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-xl font-bold text-text">Popular Surahs</h2>
             <Link
               to="/surahs"
-              className="text-primary text-sm font-medium hover:underline flex items-center gap-1"
+              className="text-primary text-xs font-semibold hover:underline flex items-center gap-1 uppercase tracking-wider"
             >
-              View All <ArrowRight size={14} />
+              View All <ArrowRight size={12} />
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {FEATURED_SURAHS.map(num => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {FEATURED_SURAHS.map((num, i) => {
               const surah = SURAHS[num - 1];
-              return <SurahCard key={surah.number} surah={surah} />;
+              return (
+                <div key={surah.number} className={`animate-fade-in-up stagger-${i + 1}`}>
+                  <SurahCard surah={surah} />
+                </div>
+              );
             })}
           </div>
         </section>
 
         {/* Features */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-text mb-6 text-center">Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section className="mb-10">
+          <h2 className="text-xl font-bold text-text mb-5 text-center">Features</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {[
               {
                 title: 'Multiple Translations',
-                description: 'Read the Quran in 20+ languages with renowned translators including Sahih International, Yusuf Ali, Pickthall, and more.',
+                description: 'Read in 20+ languages with renowned translators including Sahih International, Yusuf Ali, and more.',
                 icon: Book,
               },
               {
                 title: 'Audio Recitations',
-                description: 'Listen to beautiful recitations from world-renowned Qaris including Mishary Alafasy, Abdul Basit, Al-Sudais, and more.',
+                description: 'Listen to beautiful recitations from world-renowned Qaris including Mishary Alafasy, Abdul Basit, and more.',
                 icon: Headphones,
               },
               {
                 title: 'Smart Search',
-                description: 'Search across the entire Quran by keyword, surah name, verse reference (e.g., 2:255), or topic.',
+                description: 'Search the entire Quran by keyword, surah name, verse reference (e.g., 2:255), or topic.',
                 icon: SearchIcon,
               },
-            ].map(feature => (
-              <div key={feature.title} className="bg-surface rounded-2xl border border-border p-6 text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <feature.icon size={24} className="text-primary" />
+            ].map((feature, i) => (
+              <div
+                key={feature.title}
+                className={`animate-fade-in-up stagger-${i + 1} bg-surface rounded-xl border border-border/60 p-5 text-center card-hover shadow-card`}
+              >
+                <div className="w-10 h-10 bg-primary/8 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <feature.icon size={20} className="text-primary" />
                 </div>
-                <h3 className="font-bold text-text mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted leading-relaxed">{feature.description}</p>
+                <h3 className="font-bold text-text text-sm mb-1.5">{feature.title}</h3>
+                <p className="text-xs text-muted leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
