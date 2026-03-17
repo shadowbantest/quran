@@ -57,7 +57,7 @@ export function HomePage() {
         </div>
         {/* Wave */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 60" className="w-full h-auto fill-bg">
+          <svg viewBox="0 0 1440 60" className="w-full h-auto" style={{ fill: 'rgb(var(--color-bg))' }}>
             <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" />
           </svg>
         </div>
