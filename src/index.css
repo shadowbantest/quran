@@ -1,30 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Amiri+Quran&family=Scheherazade+New:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Lateef:wght@400;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-/* KFGQPC Uthmanic Script HAFS - King Fahd Complex official Quran font */
+/* KFGQPC Uthmanic Script HAFS - King Fahd Complex official Quran font (self-hosted) */
 @font-face {
   font-family: 'KFGQPC Uthmanic Script HAFS';
-  src: url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/KFGQPC_Uthmanic_Script_HAFS_Regular.woff2') format('woff2'),
-       url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/KFGQPC_Uthmanic_Script_HAFS_Regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Me Quran - Tanzil.net official font */
-@font-face {
-  font-family: 'Me Quran';
-  src: url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/me_quran.woff2') format('woff2'),
-       url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/me_quran.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Al Qalam Quran Majeed */
-@font-face {
-  font-family: 'Al Qalam Quran';
-  src: url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/Al_Qalam_Quran_Majeed.woff2') format('woff2'),
-       url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/Al_Qalam_Quran_Majeed.woff') format('woff');
+  src: url('/fonts/KFGQPC_Uthmanic_Script_HAFS.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

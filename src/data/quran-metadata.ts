@@ -206,14 +206,13 @@ export const BISMILLAH = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ
 
 export const ARABIC_FONTS: { id: string; name: string; family: string; label: string }[] = [
   { id: 'uthmanic', name: 'KFGQPC Uthmanic Script HAFS', family: "'KFGQPC Uthmanic Script HAFS', 'Amiri Quran', serif", label: 'Uthmanic (King Fahd)' },
-  { id: 'me-quran', name: 'Me Quran', family: "'Me Quran', 'Amiri Quran', serif", label: 'Me Quran (Tanzil)' },
   { id: 'amiri-quran', name: 'Amiri Quran', family: "'Amiri Quran', 'Amiri', serif", label: 'Amiri Quran' },
   { id: 'amiri', name: 'Amiri', family: "'Amiri', serif", label: 'Amiri (Naskh)' },
   { id: 'scheherazade', name: 'Scheherazade New', family: "'Scheherazade New', serif", label: 'Scheherazade New' },
   { id: 'noto-naskh', name: 'Noto Naskh Arabic', family: "'Noto Naskh Arabic', serif", label: 'Noto Naskh Arabic' },
+  { id: 'noto-sans-arabic', name: 'Noto Sans Arabic', family: "'Noto Sans Arabic', sans-serif", label: 'Noto Sans Arabic' },
   { id: 'noto-nastaliq', name: 'Noto Nastaliq Urdu', family: "'Noto Nastaliq Urdu', serif", label: 'Noto Nastaliq (Urdu)' },
   { id: 'lateef', name: 'Lateef', family: "'Lateef', serif", label: 'Lateef' },
-  { id: 'al-qalam', name: 'Al Qalam Quran', family: "'Al Qalam Quran', 'Amiri Quran', serif", label: 'Al Qalam Quran Majeed' },
 ];
 
 export const getArabicFontFamily = (fontId: string): string => {
