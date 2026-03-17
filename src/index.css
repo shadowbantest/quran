@@ -38,38 +38,47 @@
   /* Light Theme (default) */
   :root,
   .light {
-    --color-bg: 255 255 255;
-    --color-surface: 249 250 251;
-    --color-text: 17 24 39;
-    --color-muted: 107 114 128;
-    --color-border: 229 231 235;
-    --color-hover: 243 244 246;
-    --color-primary: 5 150 105;
-    --color-primary-dark: 4 120 87;
+    --color-bg: 252 253 255;
+    --color-surface: 255 255 255;
+    --color-text: 15 23 42;
+    --color-muted: 100 116 139;
+    --color-border: 226 232 240;
+    --color-hover: 241 245 249;
+    --color-primary: 13 148 136;
+    --color-primary-dark: 15 118 110;
+    --color-accent: 245 158 11;
+    --color-gold: 217 175 96;
+    --shadow-color: 0 0 0;
   }
 
   /* Dark Theme */
   .dark {
-    --color-bg: 17 24 39;
-    --color-surface: 31 41 55;
-    --color-text: 243 244 246;
-    --color-muted: 156 163 175;
-    --color-border: 55 65 81;
-    --color-hover: 55 65 81;
-    --color-primary: 16 185 129;
-    --color-primary-dark: 5 150 105;
+    --color-bg: 15 23 42;
+    --color-surface: 30 41 59;
+    --color-text: 241 245 249;
+    --color-muted: 148 163 184;
+    --color-border: 51 65 85;
+    --color-hover: 51 65 85;
+    --color-primary: 20 184 166;
+    --color-primary-dark: 13 148 136;
+    --color-accent: 251 191 36;
+    --color-gold: 217 175 96;
+    --shadow-color: 0 0 0;
   }
 
   /* Sepia Theme */
   .sepia {
-    --color-bg: 253 246 227;
-    --color-surface: 250 240 210;
-    --color-text: 62 48 35;
-    --color-muted: 120 100 80;
-    --color-border: 220 200 170;
-    --color-hover: 245 230 200;
-    --color-primary: 180 100 30;
-    --color-primary-dark: 150 80 20;
+    --color-bg: 253 248 237;
+    --color-surface: 255 251 240;
+    --color-text: 55 40 25;
+    --color-muted: 120 100 75;
+    --color-border: 225 210 180;
+    --color-hover: 248 238 218;
+    --color-primary: 168 98 32;
+    --color-primary-dark: 140 80 20;
+    --color-accent: 200 140 40;
+    --color-gold: 200 160 80;
+    --shadow-color: 80 60 30;
   }
 
   * {
@@ -81,6 +90,8 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: rgb(var(--color-bg));
+    color: rgb(var(--color-text));
   }
 
   html {
@@ -93,7 +104,8 @@
   }
 }
 
-/* Line clamp */
+/* ========== Utility Classes ========== */
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -101,12 +113,186 @@
   overflow: hidden;
 }
 
-/* Verse highlight animation */
+/* ========== Animations ========== */
+
 @keyframes verse-highlight {
-  0% { background-color: rgb(var(--color-primary) / 0.15); }
+  0% { background-color: rgb(var(--color-primary) / 0.2); }
   100% { background-color: transparent; }
 }
 
 :target {
   animation: verse-highlight 2s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(var(--color-primary) / 0.4); }
+  50% { box-shadow: 0 0 20px 4px rgb(var(--color-primary) / 0.15); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-in { animation: fade-in 0.4s ease-out; }
+.animate-fade-in-up { animation: fade-in-up 0.5s ease-out; }
+.animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
+.animate-slide-in-left { animation: slide-in-left 0.3s ease-out; }
+.animate-slide-up { animation: slide-up 0.3s ease-out; }
+.animate-scale-in { animation: scale-in 0.3s ease-out; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 20s linear infinite; }
+
+/* Staggered animations */
+.stagger-1 { animation-delay: 0.05s; animation-fill-mode: backwards; }
+.stagger-2 { animation-delay: 0.1s; animation-fill-mode: backwards; }
+.stagger-3 { animation-delay: 0.15s; animation-fill-mode: backwards; }
+.stagger-4 { animation-delay: 0.2s; animation-fill-mode: backwards; }
+.stagger-5 { animation-delay: 0.25s; animation-fill-mode: backwards; }
+.stagger-6 { animation-delay: 0.3s; animation-fill-mode: backwards; }
+.stagger-7 { animation-delay: 0.35s; animation-fill-mode: backwards; }
+.stagger-8 { animation-delay: 0.4s; animation-fill-mode: backwards; }
+
+/* ========== Islamic Decorative Pattern ========== */
+
+.islamic-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M30 10l20 20-20 20-20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.islamic-pattern-dark {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M30 10l20 20-20 20-20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Eight-pointed star ornament for verse numbers */
+.star-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star-badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--color-primary) / 0.1);
+  clip-path: polygon(50% 0%, 65% 25%, 93% 25%, 75% 50%, 93% 75%, 65% 75%, 50% 100%, 35% 75%, 7% 75%, 25% 50%, 7% 25%, 35% 25%);
+}
+
+/* Ornamental divider */
+.ornamental-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ornamental-divider::before,
+.ornamental-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(var(--color-primary) / 0.3), transparent);
+}
+
+/* ========== Glass effects ========== */
+
+.glass {
+  background: rgb(var(--color-surface) / 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-heavy {
+  background: rgb(var(--color-surface) / 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ========== Custom scrollbar for WebKit ========== */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-border));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--color-muted));
+}
+
+/* ========== Gradient text utility ========== */
+
+.text-gradient {
+  background: linear-gradient(135deg, rgb(var(--color-primary)), rgb(var(--color-primary-dark)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== Card hover lift ========== */
+
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgb(var(--shadow-color) / 0.08),
+              0 4px 10px -3px rgb(var(--shadow-color) / 0.04);
+}
+
+/* ========== Focus ring ========== */
+
+.focus-ring:focus-visible {
+  outline: 2px solid rgb(var(--color-primary));
+  outline-offset: 2px;
 }

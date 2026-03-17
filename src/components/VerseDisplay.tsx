@@ -59,58 +59,65 @@ export function VerseDisplay({
   return (
     <div
       id={`verse-${ayahNumber}`}
-      className={`group relative py-6 px-4 md:px-6 border-b border-border/50 transition-all duration-300 ${
-        isPlaying ? 'bg-primary/5 border-l-4 border-l-primary' : 'hover:bg-hover/50'
-      } ${isSajda ? 'bg-rose-50/50 dark:bg-rose-900/10' : ''}`}
+      className={`group relative py-5 px-4 md:px-6 border-b border-border/40 transition-all duration-300 ${
+        isPlaying ? 'bg-primary/5 border-l-2 border-l-primary' : 'hover:bg-hover/30'
+      } ${isSajda ? 'bg-rose-50/30 dark:bg-rose-900/5' : ''}`}
     >
-      {/* Verse Number Badge */}
-      <div className="flex items-center justify-between mb-4">
+      {/* Verse Header */}
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-            <span className="text-primary text-sm font-bold">{surahNumber}:{ayahNumber}</span>
+          {/* Verse number badge */}
+          <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold transition-colors ${
+            isPlaying ? 'bg-primary text-white' : 'bg-primary/8 text-primary'
+          }`}>
+            {surahNumber}:{ayahNumber}
           </div>
           {isSajda && (
-            <span className="text-xs px-2 py-1 rounded-full bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 font-medium">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 dark:bg-rose-900/20 dark:text-rose-400 font-semibold uppercase tracking-wider">
               Sajda
             </span>
           )}
         </div>
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+
+        {/* Actions */}
+        <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200">
           {onPlay && (
             <button
               onClick={onPlay}
-              className="p-2 rounded-lg hover:bg-primary/10 text-muted hover:text-primary transition-colors"
+              className={`p-1.5 rounded-lg transition-colors ${
+                isPlaying ? 'text-primary bg-primary/10' : 'text-muted hover:text-primary hover:bg-primary/8'
+              }`}
               title={isPlaying ? 'Pause' : 'Play'}
             >
-              {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+              {isPlaying ? <Pause size={15} /> : <Play size={15} />}
             </button>
           )}
           {onBookmark && (
             <button
               onClick={onBookmark}
-              className={`p-2 rounded-lg transition-colors ${
+              className={`p-1.5 rounded-lg transition-colors ${
                 isBookmarked
                   ? 'text-primary bg-primary/10'
-                  : 'hover:bg-primary/10 text-muted hover:text-primary'
+                  : 'text-muted hover:text-primary hover:bg-primary/8'
               }`}
               title={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
             >
-              {isBookmarked ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
+              {isBookmarked ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
             </button>
           )}
           <button
             onClick={handleCopy}
-            className="p-2 rounded-lg hover:bg-primary/10 text-muted hover:text-primary transition-colors"
+            className="p-1.5 rounded-lg text-muted hover:text-primary hover:bg-primary/8 transition-colors"
             title="Copy"
           >
-            <Copy size={16} />
+            <Copy size={15} />
           </button>
           <button
             onClick={handleShare}
-            className="p-2 rounded-lg hover:bg-primary/10 text-muted hover:text-primary transition-colors"
+            className="p-1.5 rounded-lg text-muted hover:text-primary hover:bg-primary/8 transition-colors"
             title="Share"
           >
-            <Share2 size={16} />
+            <Share2 size={15} />
           </button>
         </div>
       </div>
@@ -118,12 +125,12 @@ export function VerseDisplay({
       {/* Arabic Text */}
       {settings.showArabic && (
         <p
-          className={`${arabicSize} leading-[2.2] text-right text-text mb-4`}
+          className={`${arabicSize} leading-[2.2] text-right text-text mb-3`}
           dir="rtl"
           style={{ fontFamily }}
         >
           {arabicText}
-          <span className="inline-block mx-2 text-primary" style={{ fontFamily }}>
+          <span className="inline-block mx-2 text-primary/60" style={{ fontFamily }}>
             ﴿{toArabicNumeral(ayahNumber)}﴾
           </span>
         </p>
@@ -131,14 +138,14 @@ export function VerseDisplay({
 
       {/* Transliteration */}
       {settings.showTransliteration && transliterationText && (
-        <p className="text-sm text-muted italic mb-3 leading-relaxed">
+        <p className="text-xs text-muted italic mb-2 leading-relaxed">
           {transliterationText}
         </p>
       )}
 
       {/* Translation */}
       {settings.showTranslation && translationText && (
-        <p className={`${translationSize} text-text/80 leading-relaxed`}>
+        <p className={`${translationSize} text-text/70 leading-relaxed`}>
           {translationText}
         </p>
       )}

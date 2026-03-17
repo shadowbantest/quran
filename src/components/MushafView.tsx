@@ -33,17 +33,17 @@ export function MushafView({
   const fontSize = FONT_SIZE_MAP[settings.arabicFontSize];
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto animate-fade-in">
       {/* Mushaf Page Container */}
-      <div className="bg-surface mx-2 md:mx-4 my-6 rounded-2xl border-2 border-primary/20 overflow-hidden shadow-xl">
+      <div className="bg-surface mx-2 md:mx-4 my-6 rounded-2xl border border-border/60 overflow-hidden shadow-card">
         {/* Decorative Top Border */}
-        <div className="h-3 bg-gradient-to-r from-primary/30 via-primary to-primary/30" />
+        <div className="h-1.5 bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
         {/* Surah Header Frame */}
         <div className="mx-6 md:mx-10 mt-8 mb-6">
-          <div className="border-2 border-primary/40 rounded-xl px-6 py-4 text-center bg-primary/5">
+          <div className="border border-primary/25 rounded-xl px-6 py-4 text-center bg-primary/3">
             <p
-              className="text-primary leading-relaxed"
+              className="text-primary/80 leading-relaxed"
               style={{ fontFamily, fontSize: '1.8rem' }}
               dir="rtl"
             >
@@ -56,8 +56,8 @@ export function MushafView({
         {surahInfo.number !== 1 && surahInfo.number !== 9 && (
           <div className="text-center mb-6">
             <p
-              className="text-text leading-relaxed"
-              style={{ fontFamily, fontSize: '1.6rem' }}
+              className="text-text/80 leading-relaxed"
+              style={{ fontFamily, fontSize: '1.5rem' }}
               dir="rtl"
             >
               {BISMILLAH}
@@ -81,10 +81,10 @@ export function MushafView({
                   <span
                     className={`cursor-pointer transition-colors duration-200 rounded-sm ${
                       isCurrentlyPlaying
-                        ? 'bg-primary/20 text-primary'
+                        ? 'bg-primary/15 text-primary'
                         : sajda
-                          ? 'bg-rose-100/50 hover:bg-primary/10'
-                          : 'hover:bg-primary/10'
+                          ? 'bg-rose-100/30 hover:bg-primary/8'
+                          : 'hover:bg-primary/8'
                     }`}
                     onClick={() => onAyahClick(verse.numberInSurah)}
                     title={`${surahInfo.number}:${verse.numberInSurah}`}
@@ -93,7 +93,7 @@ export function MushafView({
                   </span>
                   {' '}
                   <span
-                    className="inline-block text-primary cursor-pointer"
+                    className="inline-block text-primary/50 cursor-pointer hover:text-primary transition-colors"
                     style={{ fontSize: `calc(${fontSize} * 0.75)` }}
                     onClick={() => onAyahClick(verse.numberInSurah)}
                   >
@@ -106,14 +106,14 @@ export function MushafView({
           </p>
         </div>
 
-        {/* Show translations below if enabled */}
+        {/* Translations below */}
         {settings.showTranslation && translationVerses.length > 0 && (
-          <div className="border-t-2 border-primary/20 px-6 md:px-10 py-6">
-            <h3 className="text-sm font-semibold text-muted mb-4 uppercase tracking-wider">Translation</h3>
-            <div className="space-y-3">
+          <div className="border-t border-border/40 px-6 md:px-10 py-6">
+            <h3 className="text-[10px] font-semibold text-muted mb-4 uppercase tracking-widest">Translation</h3>
+            <div className="space-y-2.5">
               {translationVerses.map((verse) => (
-                <p key={verse.numberInSurah} className="text-sm text-text/80 leading-relaxed">
-                  <span className="font-semibold text-primary text-xs mr-2">
+                <p key={verse.numberInSurah} className="text-sm text-text/70 leading-relaxed">
+                  <span className="font-semibold text-primary/70 text-xs mr-1.5">
                     {verse.numberInSurah}.
                   </span>
                   {verse.text}
@@ -124,7 +124,7 @@ export function MushafView({
         )}
 
         {/* Decorative Bottom Border */}
-        <div className="h-3 bg-gradient-to-r from-primary/30 via-primary to-primary/30" />
+        <div className="h-1.5 bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       </div>
     </div>
   );

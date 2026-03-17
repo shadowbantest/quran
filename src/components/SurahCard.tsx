@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { SurahInfo } from '../types';
-import { toArabicNumeral } from '../data/quran-metadata';
 
 interface SurahCardProps {
   surah: SurahInfo;
@@ -13,16 +12,25 @@ export function SurahCard({ surah, compact }: SurahCardProps) {
     return (
       <Link
         to={`/surah/${surah.number}`}
-        className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-hover transition-all group"
+        className="flex items-center gap-3 px-4 py-3 hover:bg-hover/60 transition-all duration-200 group"
       >
-        <div className="w-8 h-8 bg-primary/10 text-primary rounded-lg flex items-center justify-center text-xs font-bold shrink-0">
+        <div className="w-8 h-8 bg-primary/8 text-primary rounded-lg flex items-center justify-center text-xs font-bold shrink-0">
           {surah.number}
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-text truncate">{surah.englishName}</p>
           <p className="text-xs text-muted truncate">{surah.englishNameTranslation}</p>
         </div>
-        <p className="font-arabic text-lg text-primary shrink-0">{surah.name}</p>
+        <div className="flex items-center gap-2">
+          <span className={`hidden sm:inline text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+            surah.revelationType === 'Meccan'
+              ? 'bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400'
+              : 'bg-teal-50 text-teal-600 dark:bg-teal-900/20 dark:text-teal-400'
+          }`}>
+            {surah.revelationType}
+          </span>
+          <p className="font-arabic text-lg text-primary/80 shrink-0 group-hover:text-primary transition-colors">{surah.name}</p>
+        </div>
       </Link>
     );
   }
@@ -30,29 +38,29 @@ export function SurahCard({ surah, compact }: SurahCardProps) {
   return (
     <Link
       to={`/surah/${surah.number}`}
-      className="group block bg-surface rounded-2xl border border-border p-5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
+      className="group block bg-surface rounded-xl border border-border/60 p-4 card-hover shadow-card"
     >
-      <div className="flex items-start justify-between mb-3">
-        <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center shadow-sm">
-          <span className="text-white text-sm font-bold">{surah.number}</span>
+      <div className="flex items-start justify-between mb-2.5">
+        <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center shadow-sm">
+          <span className="text-white text-xs font-bold">{surah.number}</span>
         </div>
-        <span className="font-arabic text-2xl text-primary group-hover:scale-105 transition-transform">
+        <span className="font-arabic text-2xl text-primary/70 group-hover:text-primary transition-colors duration-200 leading-none">
           {surah.name}
         </span>
       </div>
       <div>
-        <h3 className="font-semibold text-text">{surah.englishName}</h3>
-        <p className="text-sm text-muted mt-0.5">{surah.englishNameTranslation}</p>
+        <h3 className="font-semibold text-text text-sm">{surah.englishName}</h3>
+        <p className="text-xs text-muted mt-0.5">{surah.englishNameTranslation}</p>
       </div>
-      <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border/50">
-        <span className={`text-xs px-2 py-0.5 rounded-full ${
+      <div className="flex items-center gap-2.5 mt-3 pt-2.5 border-t border-border/40">
+        <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
           surah.revelationType === 'Meccan'
-            ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-            : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+            ? 'bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400'
+            : 'bg-teal-50 text-teal-600 dark:bg-teal-900/20 dark:text-teal-400'
         }`}>
           {surah.revelationType}
         </span>
-        <span className="text-xs text-muted">{surah.numberOfAyahs} verses</span>
+        <span className="text-[10px] text-muted">{surah.numberOfAyahs} verses</span>
       </div>
     </Link>
   );
