@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { JUZS, SURAHS } from '../data/quran-metadata';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 export function JuzPage() {
+  usePageTitle('Browse by Juz');
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
       <div className="mb-6">

@@ -5,8 +5,10 @@ import { SearchBar } from '../components/SearchBar';
 import { searchQuran, SearchMatch } from '../api/quran';
 import { useSettings } from '../contexts/SettingsContext';
 import { TRANSLATIONS } from '../data/quran-metadata';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 export function SearchPage() {
+  usePageTitle('Search');
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
   const { settings } = useSettings();

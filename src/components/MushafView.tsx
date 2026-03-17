@@ -33,11 +33,11 @@ export function MushafView({
   const fontSize = FONT_SIZE_MAP[settings.arabicFontSize];
 
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in">
+    <div className="max-w-4xl mx-auto animate-fade-in" role="region" aria-label={`Mushaf view of Surah ${surahInfo.englishName}`}>
       {/* Mushaf Page Container */}
       <div className="bg-surface mx-2 md:mx-4 my-6 rounded-2xl border border-border/60 overflow-hidden shadow-card">
         {/* Decorative Top Border */}
-        <div className="h-1.5 bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+        <div className="h-1.5 bg-gradient-to-r from-transparent via-primary/50 to-transparent" aria-hidden="true" />
 
         {/* Surah Header Frame */}
         <div className="mx-6 md:mx-10 mt-8 mb-6">
@@ -46,6 +46,7 @@ export function MushafView({
               className="text-primary/80 leading-relaxed"
               style={{ fontFamily, fontSize: '1.8rem' }}
               dir="rtl"
+              lang="ar"
             >
               سُورَةُ {surahInfo.name}
             </p>
@@ -54,11 +55,12 @@ export function MushafView({
 
         {/* Bismillah */}
         {surahInfo.number !== 1 && surahInfo.number !== 9 && (
-          <div className="text-center mb-6">
+          <div className="text-center mb-6" aria-label="Bismillah">
             <p
               className="text-text/80 leading-relaxed"
               style={{ fontFamily, fontSize: '1.5rem' }}
               dir="rtl"
+              lang="ar"
             >
               {BISMILLAH}
             </p>
@@ -71,6 +73,7 @@ export function MushafView({
             className="text-text text-justify leading-[2.8] md:leading-[3]"
             style={{ fontFamily, fontSize }}
             dir="rtl"
+            lang="ar"
           >
             {arabicVerses.map((verse) => {
               const isCurrentlyPlaying = currentPlayingAyah === verse.numberInSurah && isPlaying;
@@ -79,6 +82,9 @@ export function MushafView({
               return (
                 <React.Fragment key={verse.numberInSurah}>
                   <span
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Verse ${surahInfo.number}:${verse.numberInSurah}${sajda ? ' (Sajda verse)' : ''}${isCurrentlyPlaying ? ' (now playing)' : ''}`}
                     className={`cursor-pointer transition-colors duration-200 rounded-sm ${
                       isCurrentlyPlaying
                         ? 'bg-primary/15 text-primary'
@@ -87,7 +93,7 @@ export function MushafView({
                           : 'hover:bg-primary/8'
                     }`}
                     onClick={() => onAyahClick(verse.numberInSurah)}
-                    title={`${surahInfo.number}:${verse.numberInSurah}`}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAyahClick(verse.numberInSurah); } }}
                   >
                     {verse.text}
                   </span>
@@ -124,7 +130,7 @@ export function MushafView({
         )}
 
         {/* Decorative Bottom Border */}
-        <div className="h-1.5 bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+        <div className="h-1.5 bg-gradient-to-r from-transparent via-primary/50 to-transparent" aria-hidden="true" />
       </div>
     </div>
   );

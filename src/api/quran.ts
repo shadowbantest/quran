@@ -1,3 +1,5 @@
+import { getCached, setCache, getMemoryCached, setMemoryCache } from '../utils/cache';
+
 const BASE_URL = 'https://api.alquran.cloud/v1';
 
 interface ApiResponse<T> {
@@ -6,7 +8,7 @@ interface ApiResponse<T> {
   data: T;
 }
 
-interface AyahData {
+export interface AyahData {
   number: number;
   text: string;
   numberInSurah: number;
@@ -26,7 +28,7 @@ interface AyahData {
   };
 }
 
-interface SurahData {
+export interface SurahData {
   number: number;
   name: string;
   englishName: string;
@@ -45,7 +47,7 @@ interface EditionData {
   type: string;
 }
 
-interface SearchMatch {
+export interface SearchMatch {
   number: number;
   text: string;
   numberInSurah: number;
@@ -60,25 +62,71 @@ interface SearchMatch {
   edition: EditionData;
 }
 
-interface SearchData {
+export interface SearchData {
   count: number;
   matches: SearchMatch[];
 }
 
-async function fetchApi<T>(endpoint: string): Promise<T> {
-  const response = await fetch(`${BASE_URL}${endpoint}`);
-  if (!response.ok) {
-    throw new Error(`API error: ${response.status} ${response.statusText}`);
+// Retry with exponential backoff
+async function fetchWithRetry(url: string, retries = 3): Promise<Response> {
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) return response;
+      if (response.status >= 500 && i < retries) {
+        await new Promise(r => setTimeout(r, Math.pow(2, i) * 500));
+        continue;
+      }
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    } catch (err) {
+      if (i === retries) throw err;
+      await new Promise(r => setTimeout(r, Math.pow(2, i) * 500));
+    }
   }
-  const data: ApiResponse<T> = await response.json();
-  if (data.code !== 200) {
-    throw new Error(`API returned error code: ${data.code}`);
+  throw new Error('Request failed after retries');
+}
+
+async function fetchApi<T>(endpoint: string, useCache = true): Promise<T> {
+  const cacheKey = `api:${endpoint}`;
+
+  if (useCache) {
+    // Check memory cache first (fastest)
+    const memoryCached = getMemoryCached<T>(cacheKey);
+    if (memoryCached) return memoryCached;
+
+    // Check IndexedDB cache
+    const dbCached = await getCached<T>(cacheKey);
+    if (dbCached) {
+      setMemoryCache(cacheKey, dbCached);
+      return dbCached;
+    }
   }
-  return data.data;
+
+  const response = await fetchWithRetry(`${BASE_URL}${endpoint}`);
+  const json: ApiResponse<T> = await response.json();
+
+  if (json.code !== 200 || !json.data) {
+    throw new Error(`API returned error code: ${json.code}`);
+  }
+
+  // Validate that we actually got data
+  const data = json.data;
+
+  if (useCache) {
+    setMemoryCache(cacheKey, data);
+    setCache(cacheKey, data);
+  }
+
+  return data;
 }
 
 export async function getSurah(surahNumber: number, edition: string = 'quran-uthmani'): Promise<SurahData> {
-  return fetchApi<SurahData>(`/surah/${surahNumber}/${edition}`);
+  const data = await fetchApi<SurahData>(`/surah/${surahNumber}/${edition}`);
+  // Validate ayah count
+  if (data.ayahs && data.ayahs.length !== data.numberOfAyahs) {
+    console.warn(`Surah ${surahNumber}: expected ${data.numberOfAyahs} ayahs, got ${data.ayahs.length}`);
+  }
+  return data;
 }
 
 export async function getSurahWithTranslation(
@@ -88,6 +136,9 @@ export async function getSurahWithTranslation(
   const data = await fetchApi<SurahData[]>(
     `/surah/${surahNumber}/editions/quran-uthmani,${translationEdition}`
   );
+  if (!Array.isArray(data) || data.length < 2) {
+    throw new Error('Invalid response: expected Arabic and translation data');
+  }
   return { arabic: data[0], translation: data[1] };
 }
 
@@ -98,32 +149,8 @@ export async function getAyah(
   return fetchApi<AyahData>(`/ayah/${reference}/${edition}`);
 }
 
-export async function getAyahWithTranslation(
-  reference: string | number,
-  translationEdition: string = 'en.sahih'
-): Promise<{ arabic: AyahData; translation: AyahData }> {
-  const data = await fetchApi<AyahData[]>(
-    `/ayah/${reference}/editions/quran-uthmani,${translationEdition}`
-  );
-  return { arabic: data[0], translation: data[1] };
-}
-
 export async function getJuz(juzNumber: number, edition: string = 'quran-uthmani'): Promise<{ number: number; ayahs: AyahData[] }> {
   return fetchApi<{ number: number; ayahs: AyahData[] }>(`/juz/${juzNumber}/${edition}`);
-}
-
-export async function getJuzWithTranslation(
-  juzNumber: number,
-  translationEdition: string = 'en.sahih'
-): Promise<{ arabic: { number: number; ayahs: AyahData[] }; translation: { number: number; ayahs: AyahData[] } }> {
-  const data = await fetchApi<{ number: number; ayahs: AyahData[] }[]>(
-    `/juz/${juzNumber}/editions/quran-uthmani,${translationEdition}`
-  );
-  return { arabic: data[0], translation: data[1] };
-}
-
-export async function getPage(pageNumber: number, edition: string = 'quran-uthmani'): Promise<{ number: number; ayahs: AyahData[] }> {
-  return fetchApi<{ number: number; ayahs: AyahData[] }>(`/page/${pageNumber}/${edition}`);
 }
 
 export async function searchQuran(
@@ -132,19 +159,8 @@ export async function searchQuran(
   surahNumber?: number
 ): Promise<SearchData> {
   const surahParam = surahNumber ? `/${surahNumber}` : '';
-  return fetchApi<SearchData>(`/search/${encodeURIComponent(keyword)}/${edition}${surahParam}`);
-}
-
-export async function getAvailableEditions(
-  format?: 'text' | 'audio',
-  type?: string,
-  language?: string
-): Promise<EditionData[]> {
-  let params = '';
-  if (format) params += `?format=${format}`;
-  if (type) params += `${params ? '&' : '?'}type=${type}`;
-  if (language) params += `${params ? '&' : '?'}language=${language}`;
-  return fetchApi<EditionData[]>(`/edition${params}`);
+  // Don't cache search results (too variable)
+  return fetchApi<SearchData>(`/search/${encodeURIComponent(keyword)}/${edition}${surahParam}`, false);
 }
 
 export async function getSurahAudio(
@@ -154,14 +170,4 @@ export async function getSurahAudio(
   return fetchApi<SurahData>(`/surah/${surahNumber}/${reciterEdition}`);
 }
 
-export function getVerseAudioUrl(surahNumber: number, ayahNumber: number, reciter: string = 'Alafasy'): string {
-  const surahStr = String(surahNumber).padStart(3, '0');
-  const ayahStr = String(ayahNumber).padStart(3, '0');
-  return `https://cdn.islamic.network/quran/audio/128/${reciter}/${surahStr}${ayahStr}.mp3`;
-}
-
-export function getVerseAudioUrlByGlobalNumber(globalAyahNumber: number): string {
-  return `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${globalAyahNumber}.mp3`;
-}
-
-export type { AyahData, SurahData, EditionData, SearchMatch, SearchData };
+export type { EditionData };

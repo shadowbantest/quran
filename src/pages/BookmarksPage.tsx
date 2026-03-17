@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookmarkX, Trash2, ArrowRight } from 'lucide-react';
 import { useBookmarks } from '../hooks/useBookmarks';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 export function BookmarksPage() {
+  usePageTitle('Bookmarks');
   const { bookmarks, removeBookmark, clearAll } = useBookmarks();
 
   return (

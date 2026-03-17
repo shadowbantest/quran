@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Loader2, X } from 'lucide-react';
 
 interface AudioPlayerProps {
@@ -15,6 +15,7 @@ interface AudioPlayerProps {
   onNext: () => void;
   onSeek: (time: number) => void;
   onClose: () => void;
+  onMuteToggle?: (muted: boolean) => void;
 }
 
 export function AudioPlayer({
@@ -31,8 +32,9 @@ export function AudioPlayer({
   onNext,
   onSeek,
   onClose,
+  onMuteToggle,
 }: AudioPlayerProps) {
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = React.useState(false);
 
   if (currentAyah === 0) return null;
 
@@ -44,84 +46,106 @@ export function AudioPlayer({
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
+  const handleMuteToggle = () => {
+    const newMuted = !muted;
+    setMuted(newMuted);
+    onMuteToggle?.(newMuted);
+  };
+
   return (
-    <div className="fixed bottom-14 lg:bottom-0 left-0 right-0 z-50 animate-slide-up">
-      <div className="glass-heavy border-t border-border/60 shadow-2xl">
+    <div
+      className="fixed bottom-14 lg:bottom-0 left-0 right-0 z-50 animate-slide-up"
+      role="region"
+      aria-label="Audio player"
+    >
+      <div className="glass-heavy border-t border-border/40 shadow-2xl">
         {/* Progress Bar */}
         <div
-          className="h-0.5 bg-border/40 cursor-pointer group"
+          className="h-1.5 bg-border/30 cursor-pointer group relative"
+          role="slider"
+          aria-label="Playback progress"
+          aria-valuenow={Math.round(currentTime)}
+          aria-valuemin={0}
+          aria-valuemax={Math.round(duration)}
+          aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
+          tabIndex={0}
           onClick={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const percent = x / rect.width;
             onSeek(percent * duration);
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'ArrowRight') onSeek(Math.min(duration, currentTime + 5));
+            if (e.key === 'ArrowLeft') onSeek(Math.max(0, currentTime - 5));
+          }}
         >
           <div
-            className="h-full bg-primary transition-all duration-150 group-hover:h-1"
+            className="h-full bg-gradient-to-r from-primary to-primary-dark transition-all duration-150 group-hover:h-2 progress-glow relative"
             style={{ width: `${progress}%` }}
           />
         </div>
 
-        <div className="max-w-7xl mx-auto px-3 py-2.5 flex items-center gap-3">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
           {/* Info */}
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-text truncate">{surahName}</p>
-            <p className="text-[10px] text-muted">
+          <div className="flex-1 min-w-0" aria-live="polite">
+            <p className="text-sm font-bold text-text truncate">{surahName}</p>
+            <p className="text-[11px] text-muted">
               Verse {currentAyah} of {totalAyahs}
             </p>
           </div>
 
           {/* Controls */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={onPrevious}
               disabled={currentAyah <= 1}
-              className="p-1.5 rounded-lg hover:bg-hover text-muted hover:text-text disabled:opacity-30 transition-colors"
+              className="p-2.5 min-w-[44px] min-h-[44px] rounded-xl hover:bg-hover text-muted hover:text-text disabled:opacity-30 transition-all duration-200"
+              aria-label="Previous verse"
             >
-              <SkipBack size={16} />
+              <SkipBack size={16} aria-hidden="true" />
             </button>
             <button
               onClick={isPlaying ? onPause : onPlay}
-              className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 shadow-sm ${
-                isPlaying
-                  ? 'bg-primary text-white'
-                  : 'bg-primary text-white'
-              }`}
+              className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg shadow-primary/25 bg-gradient-to-br from-primary to-primary-dark text-white hover:shadow-primary/40 hover:scale-105 active:scale-95"
+              aria-label={isPlaying ? 'Pause' : 'Play'}
             >
               {isLoading ? (
-                <Loader2 size={16} className="animate-spin" />
+                <Loader2 size={18} className="animate-spin" aria-hidden="true" />
               ) : isPlaying ? (
-                <Pause size={16} />
+                <Pause size={18} aria-hidden="true" />
               ) : (
-                <Play size={16} className="ml-0.5" />
+                <Play size={18} className="ml-0.5" aria-hidden="true" />
               )}
             </button>
             <button
               onClick={onNext}
               disabled={currentAyah >= totalAyahs}
-              className="p-1.5 rounded-lg hover:bg-hover text-muted hover:text-text disabled:opacity-30 transition-colors"
+              className="p-2.5 min-w-[44px] min-h-[44px] rounded-xl hover:bg-hover text-muted hover:text-text disabled:opacity-30 transition-all duration-200"
+              aria-label="Next verse"
             >
-              <SkipForward size={16} />
+              <SkipForward size={16} aria-hidden="true" />
             </button>
           </div>
 
-          {/* Time & Volume */}
-          <div className="hidden sm:flex items-center gap-2 flex-1 justify-end">
-            <span className="text-[10px] text-muted tabular-nums">
+          {/* Time, Volume, Close */}
+          <div className="flex items-center gap-2.5 flex-1 justify-end">
+            <span className="hidden sm:inline text-[11px] text-muted tabular-nums font-medium" aria-hidden="true">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
             <button
-              onClick={() => setMuted(!muted)}
-              className="p-1 rounded-lg hover:bg-hover text-muted hover:text-text transition-colors"
+              onClick={handleMuteToggle}
+              className="hidden sm:inline-flex p-2 rounded-xl hover:bg-hover text-muted hover:text-text transition-all duration-200"
+              aria-label={muted ? 'Unmute' : 'Mute'}
             >
-              {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+              {muted ? <VolumeX size={16} aria-hidden="true" /> : <Volume2 size={16} aria-hidden="true" />}
             </button>
             <button
               onClick={onClose}
-              className="p-1 rounded-lg hover:bg-hover text-muted hover:text-text transition-colors"
+              className="p-2 min-w-[44px] min-h-[44px] sm:p-2 sm:min-w-0 sm:min-h-0 rounded-xl hover:bg-hover text-muted hover:text-text transition-all duration-200"
+              aria-label="Close audio player"
             >
-              <X size={14} />
+              <X size={16} aria-hidden="true" />
             </button>
           </div>
         </div>
