@@ -83,6 +83,7 @@ export interface SearchResult {
 export type ThemeMode = 'light' | 'dark' | 'sepia';
 export type ReadingMode = 'translation' | 'reading' | 'sideBySide';
 export type FontSize = 'small' | 'medium' | 'large' | 'xlarge';
+export type ArabicFont = 'uthmanic' | 'me-quran' | 'amiri-quran' | 'amiri' | 'scheherazade' | 'noto-naskh' | 'noto-nastaliq' | 'lateef' | 'al-qalam';
 
 export interface AppSettings {
   theme: ThemeMode;
@@ -96,4 +97,5 @@ export interface AppSettings {
   showTranslation: boolean;
   autoScroll: boolean;
   mushafMode: boolean;
+  arabicFont: ArabicFont;
 }

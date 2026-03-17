@@ -204,6 +204,23 @@ export const TRANSLATIONS: TranslationEdition[] = [
 
 export const BISMILLAH = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ';
 
+export const ARABIC_FONTS: { id: string; name: string; family: string; label: string }[] = [
+  { id: 'uthmanic', name: 'KFGQPC Uthmanic Script HAFS', family: "'KFGQPC Uthmanic Script HAFS', 'Amiri Quran', serif", label: 'Uthmanic (King Fahd)' },
+  { id: 'me-quran', name: 'Me Quran', family: "'Me Quran', 'Amiri Quran', serif", label: 'Me Quran (Tanzil)' },
+  { id: 'amiri-quran', name: 'Amiri Quran', family: "'Amiri Quran', 'Amiri', serif", label: 'Amiri Quran' },
+  { id: 'amiri', name: 'Amiri', family: "'Amiri', serif", label: 'Amiri (Naskh)' },
+  { id: 'scheherazade', name: 'Scheherazade New', family: "'Scheherazade New', serif", label: 'Scheherazade New' },
+  { id: 'noto-naskh', name: 'Noto Naskh Arabic', family: "'Noto Naskh Arabic', serif", label: 'Noto Naskh Arabic' },
+  { id: 'noto-nastaliq', name: 'Noto Nastaliq Urdu', family: "'Noto Nastaliq Urdu', serif", label: 'Noto Nastaliq (Urdu)' },
+  { id: 'lateef', name: 'Lateef', family: "'Lateef', serif", label: 'Lateef' },
+  { id: 'al-qalam', name: 'Al Qalam Quran', family: "'Al Qalam Quran', 'Amiri Quran', serif", label: 'Al Qalam Quran Majeed' },
+];
+
+export const getArabicFontFamily = (fontId: string): string => {
+  const font = ARABIC_FONTS.find(f => f.id === fontId);
+  return font?.family || "'Amiri Quran', 'Amiri', serif";
+};
+
 export const toArabicNumeral = (num: number): string => {
   const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
   return String(num).split('').map(d => arabicDigits[parseInt(d)]).join('');
