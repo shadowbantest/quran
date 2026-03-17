@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Play, Pause, Loader2, BookOpen } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Pause, Loader2, BookOpen, BookText, AlignJustify } from 'lucide-react';
 import { getSurahWithTranslation, getSurahAudio, AyahData } from '../api/quran';
 import { VerseDisplay } from '../components/VerseDisplay';
+import { MushafView } from '../components/MushafView';
 import { AudioPlayer } from '../components/AudioPlayer';
-import { SURAHS, BISMILLAH, TRANSLATIONS, POPULAR_RECITERS } from '../data/quran-metadata';
+import { SURAHS, BISMILLAH, TRANSLATIONS, POPULAR_RECITERS, ARABIC_FONTS } from '../data/quran-metadata';
 import { useSettings } from '../contexts/SettingsContext';
 import { useBookmarks } from '../hooks/useBookmarks';
 import { useLastRead } from '../hooks/useLastRead';
@@ -17,7 +18,7 @@ export function SurahPage() {
   const surahNumber = parseInt(number || '1');
   const surahInfo = SURAHS[surahNumber - 1];
 
-  const { settings, setTranslation, setReciter } = useSettings();
+  const { settings, setTranslation, setReciter, setArabicFont, setMushafMode } = useSettings();
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const { saveLastRead } = useLastRead();
   const audioPlayer = useAudioPlayer();
@@ -192,13 +193,38 @@ export function SurahPage() {
 
       {/* Controls Bar */}
       <div className="sticky top-16 z-30 bg-surface/95 backdrop-blur-md border-b border-border">
-        <div className="max-w-4xl mx-auto px-4 py-2 flex items-center gap-3 overflow-x-auto">
-          <button
-            onClick={() => setShowControls(!showControls)}
-            className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted hover:text-text bg-hover rounded-lg transition-colors"
+        <div className="max-w-4xl mx-auto px-4 py-2 flex items-center gap-2 overflow-x-auto">
+          {/* Mushaf / Verse-by-Verse Toggle */}
+          <div className="shrink-0 flex bg-hover rounded-lg overflow-hidden">
+            <button
+              onClick={() => setMushafMode(false)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm transition-colors ${
+                !settings.mushafMode ? 'bg-primary text-white' : 'text-muted hover:text-text'
+              }`}
+              title="Verse by verse"
+            >
+              <AlignJustify size={14} /> Verses
+            </button>
+            <button
+              onClick={() => setMushafMode(true)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm transition-colors ${
+                settings.mushafMode ? 'bg-primary text-white' : 'text-muted hover:text-text'
+              }`}
+              title="Mushaf mode"
+            >
+              <BookText size={14} /> Mushaf
+            </button>
+          </div>
+
+          <select
+            value={settings.arabicFont}
+            onChange={(e) => setArabicFont(e.target.value as any)}
+            className="shrink-0 px-3 py-1.5 text-sm bg-hover border-none rounded-lg text-text focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
           >
-            <BookOpen size={14} /> Options
-          </button>
+            {ARABIC_FONTS.map(f => (
+              <option key={f.id} value={f.id}>{f.label}</option>
+            ))}
+          </select>
 
           <select
             value={settings.selectedTranslation}
@@ -236,7 +262,7 @@ export function SurahPage() {
       )}
 
       {/* Verses */}
-      <div ref={versesRef} className="max-w-4xl mx-auto">
+      <div ref={versesRef}>
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24">
             <Loader2 size={32} className="animate-spin text-primary mb-4" />
@@ -253,38 +279,55 @@ export function SurahPage() {
               Retry
             </button>
           </div>
+        ) : settings.mushafMode ? (
+          <MushafView
+            surahInfo={surahInfo}
+            arabicVerses={arabicVerses}
+            translationVerses={translationVerses}
+            currentPlayingAyah={audioPlayer.currentAyah}
+            isPlaying={audioPlayer.isPlaying}
+            onAyahClick={(ayahNum) => {
+              if (audioPlayer.currentAyah === ayahNum && audioPlayer.isPlaying) {
+                audioPlayer.pause();
+              } else {
+                playVerse(ayahNum);
+              }
+            }}
+          />
         ) : (
-          arabicVerses.map((verse, index) => {
-            const translation = translationVerses[index];
-            return (
-              <VerseDisplay
-                key={verse.numberInSurah}
-                surahNumber={surahNumber}
-                ayahNumber={verse.numberInSurah}
-                arabicText={verse.text}
-                translationText={translation?.text}
-                globalAyahNumber={verse.number}
-                isPlaying={audioPlayer.currentAyah === verse.numberInSurah && audioPlayer.isPlaying}
-                isBookmarked={isBookmarked(surahNumber, verse.numberInSurah)}
-                onPlay={() => {
-                  if (audioPlayer.currentAyah === verse.numberInSurah && audioPlayer.isPlaying) {
-                    audioPlayer.pause();
-                  } else {
-                    playVerse(verse.numberInSurah);
+          <div className="max-w-4xl mx-auto">
+            {arabicVerses.map((verse, index) => {
+              const translation = translationVerses[index];
+              return (
+                <VerseDisplay
+                  key={verse.numberInSurah}
+                  surahNumber={surahNumber}
+                  ayahNumber={verse.numberInSurah}
+                  arabicText={verse.text}
+                  translationText={translation?.text}
+                  globalAyahNumber={verse.number}
+                  isPlaying={audioPlayer.currentAyah === verse.numberInSurah && audioPlayer.isPlaying}
+                  isBookmarked={isBookmarked(surahNumber, verse.numberInSurah)}
+                  onPlay={() => {
+                    if (audioPlayer.currentAyah === verse.numberInSurah && audioPlayer.isPlaying) {
+                      audioPlayer.pause();
+                    } else {
+                      playVerse(verse.numberInSurah);
+                    }
+                  }}
+                  onBookmark={() =>
+                    toggleBookmark({
+                      surahNumber,
+                      ayahNumber: verse.numberInSurah,
+                      surahName: surahInfo.englishName,
+                      text: verse.text,
+                      translation: translation?.text,
+                    })
                   }
-                }}
-                onBookmark={() =>
-                  toggleBookmark({
-                    surahNumber,
-                    ayahNumber: verse.numberInSurah,
-                    surahName: surahInfo.englishName,
-                    text: verse.text,
-                    translation: translation?.text,
-                  })
-                }
-              />
-            );
-          })
+                />
+              );
+            })}
+          </div>
         )}
       </div>
 

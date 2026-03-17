@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bookmark, BookmarkCheck, Play, Pause, Share2, Copy } from 'lucide-react';
-import { toArabicNumeral, isSajdaVerse } from '../data/quran-metadata';
+import { toArabicNumeral, isSajdaVerse, getArabicFontFamily } from '../data/quran-metadata';
 import { useSettings } from '../contexts/SettingsContext';
 
 interface VerseDisplayProps {
@@ -38,6 +38,7 @@ export function VerseDisplay({
   const isSajda = isSajdaVerse(surahNumber, ayahNumber);
   const arabicSize = FONT_SIZE_MAP[settings.arabicFontSize].arabic;
   const translationSize = FONT_SIZE_MAP[settings.fontSize].translation;
+  const fontFamily = getArabicFontFamily(settings.arabicFont);
 
   const handleCopy = async () => {
     const text = `${arabicText}\n\n${translationText || ''}\n\n- Quran ${surahNumber}:${ayahNumber}`;
@@ -117,11 +118,12 @@ export function VerseDisplay({
       {/* Arabic Text */}
       {settings.showArabic && (
         <p
-          className={`font-arabic ${arabicSize} leading-[2.2] text-right text-text mb-4`}
+          className={`${arabicSize} leading-[2.2] text-right text-text mb-4`}
           dir="rtl"
+          style={{ fontFamily }}
         >
           {arabicText}
-          <span className="inline-block mx-2 text-primary font-arabic">
+          <span className="inline-block mx-2 text-primary" style={{ fontFamily }}>
             ﴿{toArabicNumeral(ayahNumber)}﴾
           </span>
         </p>

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AppSettings, ThemeMode, ReadingMode, FontSize } from '../types';
+import { AppSettings, ThemeMode, ReadingMode, FontSize, ArabicFont } from '../types';
 
 const DEFAULT_SETTINGS: AppSettings = {
   theme: 'light',
@@ -13,6 +13,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   showTranslation: true,
   autoScroll: false,
   mushafMode: false,
+  arabicFont: 'amiri-quran',
 };
 
 interface SettingsContextType {
@@ -24,6 +25,8 @@ interface SettingsContextType {
   setArabicFontSize: (size: FontSize) => void;
   setTranslation: (edition: string) => void;
   setReciter: (edition: string) => void;
+  setArabicFont: (font: ArabicFont) => void;
+  setMushafMode: (enabled: boolean) => void;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -64,6 +67,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setArabicFontSize: (size) => updateSettings({ arabicFontSize: size }),
     setTranslation: (edition) => updateSettings({ selectedTranslation: edition }),
     setReciter: (edition) => updateSettings({ selectedReciter: edition }),
+    setArabicFont: (font) => updateSettings({ arabicFont: font }),
+    setMushafMode: (enabled) => updateSettings({ mushafMode: enabled }),
   };
 
   return (

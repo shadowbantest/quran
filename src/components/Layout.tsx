@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Book, Search, Bookmark, Settings, Menu, X, Home, Layers, Moon, Sun, Type } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
+import { ARABIC_FONTS } from '../data/quran-metadata';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const location = useLocation();
-  const { settings, setTheme, setFontSize, setArabicFontSize, updateSettings } = useSettings();
+  const { settings, setTheme, setFontSize, setArabicFontSize, setArabicFont, setMushafMode, updateSettings } = useSettings();
 
   const navItems = [
     { path: '/', icon: Home, label: 'Home' },
@@ -176,6 +177,46 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       {size === 'xlarge' ? 'XL' : size.charAt(0).toUpperCase()}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              {/* Arabic Font */}
+              <div>
+                <label className="text-sm font-medium text-muted mb-2 block">Arabic Font</label>
+                <select
+                  value={settings.arabicFont}
+                  onChange={(e) => setArabicFont(e.target.value as any)}
+                  className="w-full px-3 py-2 text-sm bg-hover border-none rounded-lg text-text focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+                >
+                  {ARABIC_FONTS.map(f => (
+                    <option key={f.id} value={f.id}>{f.label}</option>
+                  ))}
+                </select>
+                <p className="text-xs text-muted mt-1.5 font-arabic" style={{ fontFamily: ARABIC_FONTS.find(f => f.id === settings.arabicFont)?.family }}>
+                  بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+                </p>
+              </div>
+
+              {/* Reading Mode */}
+              <div>
+                <label className="text-sm font-medium text-muted mb-2 block">Reading Mode</label>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setMushafMode(false)}
+                    className={`flex-1 py-2 px-3 rounded-lg text-sm transition-all ${
+                      !settings.mushafMode ? 'bg-primary text-white' : 'bg-hover text-text'
+                    }`}
+                  >
+                    Verse by Verse
+                  </button>
+                  <button
+                    onClick={() => setMushafMode(true)}
+                    className={`flex-1 py-2 px-3 rounded-lg text-sm transition-all ${
+                      settings.mushafMode ? 'bg-primary text-white' : 'bg-hover text-text'
+                    }`}
+                  >
+                    Mushaf
+                  </button>
                 </div>
               </div>
 

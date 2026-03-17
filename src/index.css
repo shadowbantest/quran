@@ -1,4 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Amiri+Quran&family=Scheherazade+New:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Lateef:wght@400;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* KFGQPC Uthmanic Script HAFS - King Fahd Complex official Quran font */
+@font-face {
+  font-family: 'KFGQPC Uthmanic Script HAFS';
+  src: url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/KFGQPC_Uthmanic_Script_HAFS_Regular.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/KFGQPC_Uthmanic_Script_HAFS_Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Me Quran - Tanzil.net official font */
+@font-face {
+  font-family: 'Me Quran';
+  src: url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/me_quran.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/me_quran.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Al Qalam Quran Majeed */
+@font-face {
+  font-family: 'Al Qalam Quran';
+  src: url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/Al_Qalam_Quran_Majeed.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/nickvdyck/quran-data@master/fonts/Al_Qalam_Quran_Majeed.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -49,88 +79,21 @@
 
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: rgb(var(--color-bg));
-    color: rgb(var(--color-text));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .font-arabic {
-    font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
-  }
-
-  /* Smooth scrolling */
   html {
     scroll-behavior: smooth;
   }
 
-  /* Selection color */
   ::selection {
     background-color: rgb(var(--color-primary) / 0.2);
     color: rgb(var(--color-text));
   }
 }
 
-@layer utilities {
-  .bg-bg { background-color: rgb(var(--color-bg)); }
-  .bg-surface { background-color: rgb(var(--color-surface)); }
-  .bg-hover { background-color: rgb(var(--color-hover)); }
-  .bg-primary { background-color: rgb(var(--color-primary)); }
-  .bg-primary-dark { background-color: rgb(var(--color-primary-dark)); }
-
-  .text-text { color: rgb(var(--color-text)); }
-  .text-muted { color: rgb(var(--color-muted)); }
-  .text-primary { color: rgb(var(--color-primary)); }
-
-  .border-border { border-color: rgb(var(--color-border)); }
-
-  .fill-bg { fill: rgb(var(--color-bg)); }
-
-  /* Opacity variants */
-  .bg-primary\/5 { background-color: rgb(var(--color-primary) / 0.05); }
-  .bg-primary\/10 { background-color: rgb(var(--color-primary) / 0.1); }
-  .bg-primary\/20 { background-color: rgb(var(--color-primary) / 0.2); }
-
-  .text-primary\/30 { color: rgb(var(--color-primary) / 0.3); }
-
-  .text-text\/80 { color: rgb(var(--color-text) / 0.8); }
-
-  .text-muted\/50 { color: rgb(var(--color-muted) / 0.5); }
-  .text-muted\/60 { color: rgb(var(--color-muted) / 0.6); }
-
-  .border-primary\/20 { border-color: rgb(var(--color-primary) / 0.2); }
-  .border-primary\/30 { border-color: rgb(var(--color-primary) / 0.3); }
-  .border-primary\/40 { border-color: rgb(var(--color-primary) / 0.4); }
-  .border-border\/50 { border-color: rgb(var(--color-border) / 0.5); }
-
-  .hover\:bg-hover:hover { background-color: rgb(var(--color-hover)); }
-  .hover\:bg-primary\/10:hover { background-color: rgb(var(--color-primary) / 0.1); }
-  .hover\:bg-primary-dark:hover { background-color: rgb(var(--color-primary-dark)); }
-
-  .hover\:text-text:hover { color: rgb(var(--color-text)); }
-  .hover\:text-primary:hover { color: rgb(var(--color-primary)); }
-
-  .hover\:border-primary\/30:hover { border-color: rgb(var(--color-primary) / 0.3); }
-  .hover\:border-primary\/40:hover { border-color: rgb(var(--color-primary) / 0.4); }
-
-  .focus\:border-primary:focus { border-color: rgb(var(--color-primary)); }
-  .focus\:ring-primary\/20:focus { --tw-ring-color: rgb(var(--color-primary) / 0.2); }
-
-  .shadow-primary\/5 { --tw-shadow-color: rgb(var(--color-primary) / 0.05); }
-  .hover\:shadow-primary\/5:hover { --tw-shadow-color: rgb(var(--color-primary) / 0.05); }
-
-  .bg-surface\/95 { background-color: rgb(var(--color-surface) / 0.95); }
-  .bg-hover\/50 { background-color: rgb(var(--color-hover) / 0.5); }
-
-  .hover\:bg-hover\/50:hover { background-color: rgb(var(--color-hover) / 0.5); }
-
-  .from-primary { --tw-gradient-from: rgb(var(--color-primary)); }
-  .to-primary-dark { --tw-gradient-to: rgb(var(--color-primary-dark)); }
-  .via-primary-dark { --tw-gradient-stops: var(--tw-gradient-from), rgb(var(--color-primary-dark)), var(--tw-gradient-to); }
-  .from-primary\/10 { --tw-gradient-from: rgb(var(--color-primary) / 0.1); }
-}
-
-/* Line clamp for older browsers */
+/* Line clamp */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
