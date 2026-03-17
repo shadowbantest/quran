@@ -2,11 +2,13 @@ import React, { useState, useMemo } from 'react';
 import { Search, Grid3X3, List } from 'lucide-react';
 import { SurahCard } from '../components/SurahCard';
 import { SURAHS } from '../data/quran-metadata';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 type ViewMode = 'grid' | 'list';
 type FilterType = 'all' | 'Meccan' | 'Medinan';
 
 export function SurahListPage() {
+  usePageTitle('All Surahs');
   const [search, setSearch] = useState('');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [filter, setFilter] = useState<FilterType>('all');

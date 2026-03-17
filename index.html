@@ -2,14 +2,64 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Read, listen, and study the Holy Quran with translations in 20+ languages, beautiful recitations, and powerful search." />
-    <meta name="theme-color" content="#059669" />
-    <title>Al-Quran - Read, Listen & Study the Holy Quran</title>
+    <title>Al-Quran - Read, Listen &amp; Study the Holy Quran</title>
+    <meta name="description" content="Read, listen, and study the Holy Quran with translations in 20+ languages, beautiful recitations by world-renowned Qaris, and powerful search." />
+    <meta name="theme-color" content="#0d9488" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230d9488'/><text x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='serif'>قـ</text></svg>" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Al-Quran - Read, Listen & Study the Holy Quran" />
+    <meta property="og:description" content="Read, listen, and study the Holy Quran with translations in 20+ languages, beautiful recitations, and powerful search." />
+    <meta property="og:site_name" content="Al-Quran" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Al-Quran - Read, Listen & Study the Holy Quran" />
+    <meta name="twitter:description" content="Read, listen, and study the Holy Quran with translations in 20+ languages, beautiful recitations, and powerful search." />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Al-Quran",
+      "description": "Read, listen, and study the Holy Quran with translations in 20+ languages, beautiful recitations, and powerful search.",
+      "applicationCategory": "ReligiousApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <!-- Preconnect to API and CDN -->
+    <link rel="preconnect" href="https://api.alquran.cloud" />
+    <link rel="preconnect" href="https://cdn.islamic.network" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/index.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

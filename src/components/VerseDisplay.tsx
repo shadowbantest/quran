@@ -40,15 +40,17 @@ export function VerseDisplay({
   const translationSize = FONT_SIZE_MAP[settings.fontSize].translation;
   const fontFamily = getArabicFontFamily(settings.arabicFont);
 
+  const verseRef = `${surahNumber}:${ayahNumber}`;
+
   const handleCopy = async () => {
-    const text = `${arabicText}\n\n${translationText || ''}\n\n- Quran ${surahNumber}:${ayahNumber}`;
+    const text = `${arabicText}\n\n${translationText || ''}\n\n- Quran ${verseRef}`;
     await navigator.clipboard.writeText(text);
   };
 
   const handleShare = async () => {
     if (navigator.share) {
       await navigator.share({
-        title: `Quran ${surahNumber}:${ayahNumber}`,
+        title: `Quran ${verseRef}`,
         text: `${arabicText}\n\n${translationText || ''}`,
       });
     } else {
@@ -57,21 +59,21 @@ export function VerseDisplay({
   };
 
   return (
-    <div
+    <article
       id={`verse-${ayahNumber}`}
       className={`group relative py-5 px-4 md:px-6 border-b border-border/40 transition-all duration-300 ${
         isPlaying ? 'bg-primary/5 border-l-2 border-l-primary' : 'hover:bg-hover/30'
       } ${isSajda ? 'bg-rose-50/30 dark:bg-rose-900/5' : ''}`}
+      aria-label={`Verse ${verseRef}`}
     >
       {/* Verse Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          {/* Verse number badge */}
-          <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold transition-colors ${
+          <span className={`w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold transition-colors ${
             isPlaying ? 'bg-primary text-white' : 'bg-primary/8 text-primary'
-          }`}>
-            {surahNumber}:{ayahNumber}
-          </div>
+          }`} aria-hidden="true">
+            {verseRef}
+          </span>
           {isSajda && (
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 dark:bg-rose-900/20 dark:text-rose-400 font-semibold uppercase tracking-wider">
               Sajda
@@ -79,45 +81,46 @@ export function VerseDisplay({
           )}
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200">
+        {/* Actions - visible on mobile, enhanced on hover for desktop */}
+        <div className="flex items-center gap-0.5 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100 transition-opacity duration-200">
           {onPlay && (
             <button
               onClick={onPlay}
-              className={`p-1.5 rounded-lg transition-colors ${
+              className={`p-2 min-w-[44px] min-h-[44px] sm:p-1.5 sm:min-w-0 sm:min-h-0 rounded-lg transition-colors ${
                 isPlaying ? 'text-primary bg-primary/10' : 'text-muted hover:text-primary hover:bg-primary/8'
               }`}
-              title={isPlaying ? 'Pause' : 'Play'}
+              aria-label={isPlaying ? `Pause verse ${verseRef}` : `Play verse ${verseRef}`}
             >
-              {isPlaying ? <Pause size={15} /> : <Play size={15} />}
+              {isPlaying ? <Pause size={15} aria-hidden="true" /> : <Play size={15} aria-hidden="true" />}
             </button>
           )}
           {onBookmark && (
             <button
               onClick={onBookmark}
-              className={`p-1.5 rounded-lg transition-colors ${
+              className={`p-2 min-w-[44px] min-h-[44px] sm:p-1.5 sm:min-w-0 sm:min-h-0 rounded-lg transition-colors ${
                 isBookmarked
                   ? 'text-primary bg-primary/10'
                   : 'text-muted hover:text-primary hover:bg-primary/8'
               }`}
-              title={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
+              aria-label={isBookmarked ? `Remove bookmark for verse ${verseRef}` : `Bookmark verse ${verseRef}`}
+              aria-pressed={isBookmarked}
             >
-              {isBookmarked ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
+              {isBookmarked ? <BookmarkCheck size={15} aria-hidden="true" /> : <Bookmark size={15} aria-hidden="true" />}
             </button>
           )}
           <button
             onClick={handleCopy}
-            className="p-1.5 rounded-lg text-muted hover:text-primary hover:bg-primary/8 transition-colors"
-            title="Copy"
+            className="p-2 min-w-[44px] min-h-[44px] sm:p-1.5 sm:min-w-0 sm:min-h-0 rounded-lg text-muted hover:text-primary hover:bg-primary/8 transition-colors"
+            aria-label={`Copy verse ${verseRef}`}
           >
-            <Copy size={15} />
+            <Copy size={15} aria-hidden="true" />
           </button>
           <button
             onClick={handleShare}
-            className="p-1.5 rounded-lg text-muted hover:text-primary hover:bg-primary/8 transition-colors"
-            title="Share"
+            className="hidden sm:inline-flex p-1.5 rounded-lg text-muted hover:text-primary hover:bg-primary/8 transition-colors"
+            aria-label={`Share verse ${verseRef}`}
           >
-            <Share2 size={15} />
+            <Share2 size={15} aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -125,12 +128,13 @@ export function VerseDisplay({
       {/* Arabic Text */}
       {settings.showArabic && (
         <p
-          className={`${arabicSize} leading-[2.2] text-right text-text mb-3`}
+          className={`${arabicSize} leading-[2.6] md:leading-[2.8] text-right text-text mb-3`}
           dir="rtl"
-          style={{ fontFamily }}
+          lang="ar"
+          style={{ fontFamily, wordSpacing: '0.05em' }}
         >
           {arabicText}
-          <span className="inline-block mx-2 text-primary/60" style={{ fontFamily }}>
+          <span className="inline-block mx-2 text-primary/60" style={{ fontFamily }} aria-hidden="true">
             ﴿{toArabicNumeral(ayahNumber)}﴾
           </span>
         </p>
@@ -138,7 +142,7 @@ export function VerseDisplay({
 
       {/* Transliteration */}
       {settings.showTransliteration && transliterationText && (
-        <p className="text-xs text-muted italic mb-2 leading-relaxed">
+        <p className="text-xs text-muted italic mb-2 leading-relaxed" lang="ar-Latn">
           {transliterationText}
         </p>
       )}
@@ -149,6 +153,6 @@ export function VerseDisplay({
           {translationText}
         </p>
       )}
-    </div>
+    </article>
   );
 }

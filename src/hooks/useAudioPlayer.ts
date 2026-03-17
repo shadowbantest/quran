@@ -10,6 +10,7 @@ interface AudioPlayerState {
 
 export function useAudioPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const listenersRef = useRef<Array<{ event: string; handler: EventListener }>>([]);
   const [state, setState] = useState<AudioPlayerState>({
     isPlaying: false,
     currentAyah: 0,
@@ -19,32 +20,63 @@ export function useAudioPlayer() {
   });
 
   useEffect(() => {
-    audioRef.current = new Audio();
-    const audio = audioRef.current;
+    const audio = new Audio();
+    audioRef.current = audio;
 
-    audio.addEventListener('timeupdate', () => {
-      setState(prev => ({ ...prev, currentTime: audio.currentTime }));
-    });
+    // Throttle timeupdate to reduce re-renders (fire every ~250ms instead of ~60ms)
+    let lastUpdate = 0;
+    const onTimeUpdate = () => {
+      const now = Date.now();
+      if (now - lastUpdate > 250) {
+        lastUpdate = now;
+        setState(prev => ({ ...prev, currentTime: audio.currentTime }));
+      }
+    };
 
-    audio.addEventListener('loadedmetadata', () => {
+    const onLoadedMetadata = () => {
       setState(prev => ({ ...prev, duration: audio.duration, isLoading: false }));
-    });
+    };
 
-    audio.addEventListener('ended', () => {
+    const onEnded = () => {
       setState(prev => ({ ...prev, isPlaying: false }));
-    });
+    };
 
-    audio.addEventListener('waiting', () => {
+    const onWaiting = () => {
       setState(prev => ({ ...prev, isLoading: true }));
-    });
+    };
 
-    audio.addEventListener('canplay', () => {
+    const onCanPlay = () => {
       setState(prev => ({ ...prev, isLoading: false }));
+    };
+
+    const onError = () => {
+      setState(prev => ({ ...prev, isLoading: false, isPlaying: false }));
+    };
+
+    // Add all listeners and track them for cleanup
+    const events: Array<[string, EventListener]> = [
+      ['timeupdate', onTimeUpdate],
+      ['loadedmetadata', onLoadedMetadata],
+      ['ended', onEnded],
+      ['waiting', onWaiting],
+      ['canplay', onCanPlay],
+      ['error', onError],
+    ];
+
+    events.forEach(([event, handler]) => {
+      audio.addEventListener(event, handler);
+      listenersRef.current.push({ event, handler });
     });
 
     return () => {
+      // Remove ALL event listeners on cleanup
+      listenersRef.current.forEach(({ event, handler }) => {
+        audio.removeEventListener(event, handler);
+      });
+      listenersRef.current = [];
       audio.pause();
       audio.src = '';
+      audioRef.current = null;
     };
   }, []);
 
@@ -75,7 +107,7 @@ export function useAudioPlayer() {
       audio.pause();
       audio.currentTime = 0;
     }
-    setState(prev => ({ ...prev, isPlaying: false, currentAyah: 0, currentTime: 0 }));
+    setState({ isPlaying: false, currentAyah: 0, currentTime: 0, duration: 0, isLoading: false });
   }, []);
 
   const seek = useCallback((time: number) => {
@@ -90,12 +122,19 @@ export function useAudioPlayer() {
     }
   }, []);
 
+  const setMuted = useCallback((muted: boolean) => {
+    if (audioRef.current) {
+      audioRef.current.muted = muted;
+    }
+  }, []);
+
   const onEnded = useCallback((callback: () => void) => {
     const audio = audioRef.current;
     if (audio) {
       audio.addEventListener('ended', callback);
       return () => audio.removeEventListener('ended', callback);
     }
+    return () => {};
   }, []);
 
   return {
@@ -105,6 +144,7 @@ export function useAudioPlayer() {
     stop,
     seek,
     setVolume,
+    setMuted,
     onEnded,
     audioRef,
   };

@@ -160,7 +160,7 @@ export const SAJDAS: SajdaInfo[] = [
   { surah: 22, ayah: 77, recommended: true, obligatory: false },
   { surah: 25, ayah: 60, recommended: true, obligatory: false },
   { surah: 27, ayah: 26, recommended: true, obligatory: false },
-  { surah: 32, ayah: 15, recommended: true, obligatory: false },
+  { surah: 32, ayah: 15, recommended: true, obligatory: true },
   { surah: 38, ayah: 24, recommended: true, obligatory: false },
   { surah: 41, ayah: 38, recommended: true, obligatory: false },
   { surah: 53, ayah: 62, recommended: true, obligatory: false },
